@@ -1,6 +1,7 @@
 package users
 
 import (
+	"fmt"
 	"laundro-api-ca/app/middleware"
 	"laundro-api-ca/business"
 	"laundro-api-ca/business/addresses"
@@ -9,18 +10,23 @@ import (
 
 type userService struct {
 	userRepository 		Repository
+	addrRepository		addresses.Repository
 	jwtAuth		   		*middleware.ConfigJWT
 }
 
-func NewUserService(userRepo Repository, jwtauth *middleware.ConfigJWT) Service {
+func NewUserService(userRepo Repository, addrRepo addresses.Repository, jwtauth *middleware.ConfigJWT) Service {
 	return &userService{
 		userRepository: userRepo,
+		addrRepository: addrRepo,
 		jwtAuth: jwtauth,
 	}
 }
 
 func (service *userService) Register(userData *Domain, addressData *addresses.Domain) (Domain, error){
-	res, err := service.userRepository.Register(userData, addressData)
+	newAddr, err := service.addrRepository.Insert(addressData)
+	userData.AddressID = newAddr.ID
+	fmt.Println(userData)
+	res, err := service.userRepository.Register(userData)
 	if res == (Domain{}) {
 		return Domain{}, business.ErrDuplicateData
 	}

@@ -1,9 +1,7 @@
 package users
 
 import (
-	"laundro-api-ca/business/addresses"
 	"laundro-api-ca/business/users"
-	repoAddr "laundro-api-ca/drivers/databases/addresses"
 
 	"gorm.io/gorm"
 )
@@ -18,20 +16,9 @@ func NewMySQLRepository(conn *gorm.DB) users.Repository {
 	}
 }
 
-func (mysqlRepo *mysqlUsersRepository) Register(userData *users.Domain, addressData *addresses.Domain) (users.Domain, error){
+func (mysqlRepo *mysqlUsersRepository) Register(userData *users.Domain) (users.Domain, error){
 	recUser := fromDomain(*userData)
-	recAddress := repoAddr.FromDomain(*addressData)
-	
-	queryString := "street = ? AND postal_code = ? AND city = ? AND province = ?"
-	err := mysqlRepo.Conn.First(&recAddress, queryString ,recAddress.Street, recAddress.PostalCode, recAddress.City, recAddress.Province).Error
-	if err != nil {
-		if err := mysqlRepo.Conn.Create(&recAddress).Error; err != nil {
-			return users.Domain{}, err
-		}
-	}
-
-	recUser.AddressID = recAddress.ID
-	err = mysqlRepo.Conn.Create(&recUser).Error
+	err := mysqlRepo.Conn.Create(&recUser).Error
 	if err != nil {
 		return users.Domain{}, err
 	}

@@ -22,7 +22,7 @@ import (
 )
 
 func init() {
-	viper.SetConfigFile(`config/config.json`)
+	viper.SetConfigFile(`app/config/config.json`)
 	err := viper.ReadInConfig()
 	if err != nil {
 		panic(err)
@@ -62,8 +62,10 @@ func main() {
 
 	e := echo.New()
 
+	addrRepo := _driverFactory.NewAddressRepository(db)
+
 	userRepo := _driverFactory.NewUserRepository(db)
-	userService := _userService.NewUserService(userRepo, &configJWT)
+	userService := _userService.NewUserService(userRepo, addrRepo, &configJWT)
 	userCtrl := _userController.NewUserController(userService)
 
 	routesInit := _routes.ControllerList{

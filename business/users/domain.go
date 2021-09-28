@@ -26,7 +26,7 @@ type Service interface {
 }
 
 type Repository interface {
-	Register(userData *Domain, addressData *addresses.Domain) (Domain, error)
+	Register(userData *Domain) (Domain, error)
 	GetByUsername(username string) (Domain, error)
 	GetByID(id uint) (Domain, error)
 }

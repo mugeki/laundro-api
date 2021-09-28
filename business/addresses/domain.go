@@ -7,3 +7,9 @@ type Domain struct {
 	City       string `json:"city"`
 	Province   string `json:"province"`
 }
+
+type Repository interface {
+	Insert(address *Domain) (Domain, error)
+	FindByID(id uint) (Domain, error)
+	FindByCity(city string) ([]Domain, error)
+}
