@@ -30,6 +30,15 @@ func (rec *Laundromats) toDomain() laundromats.Domain{
 	}
 }
 
+func toDomainArray(rec []Laundromats) []laundromats.Domain{
+	domain := []laundromats.Domain{}
+
+	for _, val := range rec{
+		domain = append(domain, val.toDomain())
+	}
+	return domain
+}
+
 func fromDomain(domain laundromats.Domain) *Laundromats{
 	return &Laundromats{
 		Model: gorm.Model{

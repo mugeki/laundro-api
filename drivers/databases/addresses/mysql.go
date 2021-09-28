@@ -39,12 +39,11 @@ func (mysqlRepo *mysqlAddressesRepository) FindByID(id uint) (addresses.Domain, 
 
 func (mysqlRepo *mysqlAddressesRepository) FindByCity(city string) ([]addresses.Domain, error){
 	rec := []Addresses{}
-	err := mysqlRepo.Conn.Find(&rec, city).Error
+	err := mysqlRepo.Conn.Find(&rec, "city = ?", city).Error
 	if err != nil {
 		return []addresses.Domain{}, err
 	}
-
-	var domainAddresses []addresses.Domain
+	domainAddresses := []addresses.Domain{}
 	for _, val := range rec{
 		domainAddresses = append(domainAddresses, val.toDomain())
 	}

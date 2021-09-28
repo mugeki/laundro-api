@@ -16,17 +16,19 @@ type Domain struct {
 }
 
 type Service interface{
-	Insert(laundroData *Domain, addressData *addresses.Domain) (Domain, error)
-	GetLaundromatsByIP() ([]Domain, error)
-	GetLaundromatsByName(laundroData *Domain) ([]Domain, error)
-	UpdateLaundromat(id uint, laundroData *Domain, addressData *addresses.Domain) (Domain, error)
-	DeleteLaundromat(id uint) (string, error)
+	Insert(userID uint, laundroData *Domain, addressData *addresses.Domain) (Domain, error)
+	GetByIP() ([]Domain, error)
+	GetByName(name string) ([]Domain, error)
+	GetByID(id uint) (Domain, error)
+	Update(id uint, laundroData *Domain, addressData *addresses.Domain) (Domain, error)
+	Delete(id uint) (string, error)
 }
 
 type Repository interface{
-	Insert(laundroData *Domain, addressData *addresses.Domain) (Domain, error)
-	GetLaundromatsByIP() ([]Domain, error)
-	GetLaundromatsByName(name string) ([]Domain, error)
-	UpdateLaundromat(id uint, laundroData *Domain, addressData *addresses.Domain) (Domain, error)
-	DeleteLaundromat(id uint) (string, error)
+	Insert(laundroData *Domain) (Domain, error)
+	GetByAddress(addressID []uint) ([]Domain, error)
+	GetByName(name string) ([]Domain, error)
+	GetByID(id uint) (Domain, error)
+	Update(id uint, laundroData *Domain) (Domain, error)
+	Delete(id uint) (string, error)
 }

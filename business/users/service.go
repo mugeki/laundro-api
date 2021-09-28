@@ -1,7 +1,6 @@
 package users
 
 import (
-	"fmt"
 	"laundro-api-ca/app/middleware"
 	"laundro-api-ca/business"
 	"laundro-api-ca/business/addresses"
@@ -23,9 +22,12 @@ func NewUserService(userRepo Repository, addrRepo addresses.Repository, jwtauth 
 }
 
 func (service *userService) Register(userData *Domain, addressData *addresses.Domain) (Domain, error){
+	
 	newAddr, err := service.addrRepository.Insert(addressData)
+
+	hashedPassword, _ := encrypt.Hash(userData.Password)
+	userData.Password = string(hashedPassword)
 	userData.AddressID = newAddr.ID
-	fmt.Println(userData)
 	res, err := service.userRepository.Register(userData)
 	if res == (Domain{}) {
 		return Domain{}, business.ErrDuplicateData

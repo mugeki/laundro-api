@@ -1,9 +1,8 @@
 package laundromats
 
 import (
-	"laundro-api-ca/business/addresses"
+	"fmt"
 	"laundro-api-ca/business/laundromats"
-	repoAddr "laundro-api-ca/drivers/databases/addresses"
 
 	"gorm.io/gorm"
 )
@@ -12,44 +11,66 @@ type mysqlLaundromatsRepository struct {
 	Conn *gorm.DB
 }
 
-// func NewMySQLRepository(conn *gorm.DB) laundromats.Repository {
-// 	return &mysqlLaundromatsRepository{
-// 		Conn: conn,
-// 	}
-// }
-
-func (mysqlRepo *mysqlLaundromatsRepository) Insert(laundroData *laundromats.Domain, addressData *addresses.Domain) (laundromats.Domain, error){
-	recLaundro := fromDomain(*laundroData)
-	recAddress := repoAddr.FromDomain(*addressData)
-	
-	queryString := "street = ? AND postal_code = ? AND city = ? AND province = ?"
-	err := mysqlRepo.Conn.First(&recAddress, queryString ,recAddress.Street, recAddress.PostalCode, recAddress.City, recAddress.Province).Error
-	if err != nil {
-		if err := mysqlRepo.Conn.Create(&recAddress).Error; err != nil {
-			return laundromats.Domain{}, err
-		}
+func NewMySQLRepository(conn *gorm.DB) laundromats.Repository {
+	return &mysqlLaundromatsRepository{
+		Conn: conn,
 	}
+}
 
-	recLaundro.AddressID = recAddress.ID
-	err = mysqlRepo.Conn.Create(&recLaundro).Error
+func (mysqlRepo *mysqlLaundromatsRepository) Insert(laundroData *laundromats.Domain) (laundromats.Domain, error){
+	rec := fromDomain(*laundroData)
+	err := mysqlRepo.Conn.Create(&rec).Error
 	if err != nil {
 		return laundromats.Domain{}, err
 	}
-	return recLaundro.toDomain(), nil
+	return rec.toDomain(), nil
 }
 
-// func (mysqlRepo *mysqlLaundromatsRepository) GetLaundromatsByIP() ([]laundromats.Domain, error){
+func (mysqlRepo *mysqlLaundromatsRepository) GetByAddress(addressID []uint) ([]laundromats.Domain, error){
+	rec := []Laundromats{}
+	if err := mysqlRepo.Conn.Find(&rec, "address_id IN ?", addressID).Error
+	err != nil{
+		return nil, err
+	}
+	laundro := toDomainArray(rec)
+	return laundro, nil
+}
 
-// }
+func (mysqlRepo *mysqlLaundromatsRepository) GetByName(name string) ([]laundromats.Domain, error){
+	rec := []Laundromats{}
+	if err := mysqlRepo.Conn.Find(&rec, "name LIKE ?", "%"+name+"%").Error
+	err != nil{
+		return nil, err
+	}
+	fmt.Println(rec)
+	laundro := toDomainArray(rec)
+	return laundro, nil
+}
 
-// func (mysqlRepo *mysqlLaundromatsRepository) GetLaundromatsByName(name string) ([]laundromats.Domain, error){
+func (mysqlRepo *mysqlLaundromatsRepository) GetByID(id uint) (laundromats.Domain, error){
+	rec := Laundromats{}
+	err := mysqlRepo.Conn.First(&rec, "id = ?", id).Error
+	if err != nil {
+		return laundromats.Domain{}, err
+	}
+	return rec.toDomain(), nil
+}
 
-// }
+func (mysqlRepo *mysqlLaundromatsRepository) Update(id uint, laundroData *laundromats.Domain) (laundromats.Domain, error){
+	rec := fromDomain(*laundroData)
+	recData := *rec
+	if err := mysqlRepo.Conn.First(&rec, "id = ?",id).Updates(recData).Error
+	err != nil{
+		return laundromats.Domain{}, err
+	}
+	return rec.toDomain(), nil
+}
 
-// func (mysqlRepo *mysqlLaundromatsRepository) UpdateLaundromat(id uint, laundroData *laundromats.Domain, addressData *addresses.Domain) (laundromats.Domain, error){
-
-// }
-
-// func (mysqlRepo *mysqlLaundromatsRepository) DeleteLaundromat(id uint) (string, error){
-
-// }
+func (mysqlRepo *mysqlLaundromatsRepository) Delete(id uint) (string, error){
+	rec := laundromats.Domain{}
+	if err := mysqlRepo.Conn.Delete(&rec, "id = ?",id).Error
+	err != nil {
+		return "", err
+	}
+	return "Laundromat Deleted", nil
+}
