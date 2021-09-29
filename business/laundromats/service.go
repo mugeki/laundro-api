@@ -58,7 +58,7 @@ func (service *laundroService) GetByIP() ([]Domain, error){
 func (service *laundroService) GetByName(name string) ([]Domain, error){
 	laundroDomain, err := service.laundroRepository.GetByName(name)
 	if err != nil {
-		return []Domain{}, err
+		return []Domain{}, business.ErrLaundromatNotFound
 	}
 	return laundroDomain, nil
 
@@ -67,7 +67,7 @@ func (service *laundroService) GetByName(name string) ([]Domain, error){
 func (service *laundroService) GetByID(id uint) (Domain, error){
 	laundroDomain, err := service.laundroRepository.GetByID(id)
 	if err != nil {
-		return Domain{}, err
+		return Domain{}, business.ErrLaundromatNotFound
 	}
 	return laundroDomain, nil
 }
@@ -77,7 +77,7 @@ func (service *laundroService) Update(id uint, laundroData *Domain, addressData 
 	laundroData.AddressID = newAddr.ID
 	laundroDomain, err := service.laundroRepository.Update(id, laundroData)
 	if err != nil {
-		return Domain{}, err
+		return Domain{}, business.ErrLaundromatNotFound
 	}
 	return laundroDomain, nil
 }
@@ -85,7 +85,7 @@ func (service *laundroService) Update(id uint, laundroData *Domain, addressData 
 func (service *laundroService) Delete(id uint) (string, error){
 	res, err := service.laundroRepository.Delete(id)
 	if err != nil {
-		return "", err
+		return "", business.ErrLaundromatNotFound
 	}
 	return res, nil
 }

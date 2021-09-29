@@ -10,7 +10,7 @@ type Domain struct {
 	Name      string
 	OwnerID   uint
 	AddressID uint
-	Status    int
+	Status    bool
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }

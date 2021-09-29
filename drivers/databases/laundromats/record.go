@@ -15,7 +15,7 @@ type Laundromats struct {
 	Owner     users.Users    	  `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:CASCADE;"`
 	AddressID uint    			  `json:"address_id"`
 	Address   addresses.Addresses `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:NO ACTION;"`
-	Status    int     			  `json:"status" gorm:"default:0"`
+	Status    bool     			  `json:"status" gorm:"default:false"`
 }
 
 func (rec *Laundromats) toDomain() laundromats.Domain{

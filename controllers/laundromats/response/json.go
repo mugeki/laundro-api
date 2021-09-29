@@ -6,7 +6,7 @@ import (
 
 type Laundromats struct {
 	Name      string  `json:"name"`
-	Status    int     `json:"status"`
+	Status    bool     `json:"status"`
 	OwnerID   uint    `json:"owner_id"`
 	AddressID uint    `json:"address"`
 }

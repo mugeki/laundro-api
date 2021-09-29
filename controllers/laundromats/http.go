@@ -71,10 +71,10 @@ func (ctrl *LaundromatController) Update(c echo.Context) error {
 		return controller.NewErrorResponse(c, http.StatusBadRequest, err)
 	}
 
-	id := c.Param("id")
-	idConv, _ := strconv.Atoi(id)
+	param := c.Param("id")
+	laundroID, _ := strconv.Atoi(param)
 	laundroData, addrData := req.ToDomain()
-	data, err := ctrl.laundromatService.Update(uint(idConv), laundroData, addrData)
+	data, err := ctrl.laundromatService.Update(uint(laundroID), laundroData, addrData)
 	if err != nil {
 		return controller.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}
@@ -83,9 +83,9 @@ func (ctrl *LaundromatController) Update(c echo.Context) error {
 }
 
 func (ctrl *LaundromatController) Delete(c echo.Context) error {
-	id := c.Param("id")
-	idConv, _ := strconv.Atoi(id)
-	data, err := ctrl.laundromatService.Delete(uint(idConv))
+	param := c.Param("id")
+	laundroID, _ := strconv.Atoi(param)
+	data, err := ctrl.laundromatService.Delete(uint(laundroID))
 	if err != nil {
 		return controller.NewErrorResponse(c, http.StatusInternalServerError, err)
 	}

@@ -7,6 +7,9 @@ import (
 	userDomain "laundro-api-ca/business/users"
 	userDB "laundro-api-ca/drivers/databases/users"
 
+	productDomain "laundro-api-ca/business/products"
+	productDB "laundro-api-ca/drivers/databases/products"
+
 	laundroDomain "laundro-api-ca/business/laundromats"
 	laundroDB "laundro-api-ca/drivers/databases/laundromats"
 
@@ -31,4 +34,8 @@ func NewLaundromatRepository(conn *gorm.DB) laundroDomain.Repository{
 
 func NewGeolocationRepository() geolocationDomain.Repository{
 	return ipAPI.NewIpAPI()
+}
+
+func NewProductRepository(conn *gorm.DB) productDomain.Repository{
+	return productDB.NewMySQLRepository(conn)
 }
