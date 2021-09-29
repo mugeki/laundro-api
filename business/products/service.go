@@ -2,6 +2,7 @@ package products
 
 import (
 	"laundro-api-ca/business"
+	"laundro-api-ca/business/laundromats"
 )
 
 type productService struct {
@@ -63,4 +64,12 @@ func (service *productService) Delete(id uint) (string, error) {
 func (service *productService) GetLaundromatID(id uint) uint{
 	res := service.productRepository.GetLaundromatID(id)
 	return res
+}
+
+func (service *productService) GetLaundromatByCategory(categoryId int) ([]laundromats.Domain, error){
+	res, err := service.productRepository.GetLaundromatByCategory(categoryId)
+	if err != nil {
+		return []laundromats.Domain{}, business.ErrLaundromatNotFound
+	}
+	return res, nil
 }

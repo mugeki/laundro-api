@@ -39,16 +39,18 @@ func (service *laundroService) GetByIP() ([]Domain, error){
 	if err != nil {
 		return []Domain{}, business.ErrInternalServer
 	}
+
 	addrData, err := service.addrRepository.FindByCity(location.City)
 	if err != nil {
 		return []Domain{}, business.ErrNearestLaundromatNotFound
 	}
-	
+
 	addressID := []uint{}
 	for _, val := range addrData{
 		addressID = append(addressID,val.ID)
 	}
 	laundroDomain, err := service.laundroRepository.GetByAddress(addressID)
+
 	if err != nil {
 		return []Domain{}, business.ErrNearestLaundromatNotFound
 	}

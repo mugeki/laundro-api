@@ -1,7 +1,7 @@
 package laundromats
 
 import (
-	"fmt"
+	"errors"
 	"laundro-api-ca/business/laundromats"
 
 	"gorm.io/gorm"
@@ -28,11 +28,12 @@ func (mysqlRepo *mysqlLaundromatsRepository) Insert(laundroData *laundromats.Dom
 
 func (mysqlRepo *mysqlLaundromatsRepository) GetByAddress(addressID []uint) ([]laundromats.Domain, error){
 	rec := []Laundromats{}
-	if err := mysqlRepo.Conn.Find(&rec, "address_id IN ?", addressID).Error
-	err != nil{
+	err := mysqlRepo.Conn.Find(&rec, "address_id IN ?", addressID).Error
+	if len(rec) == 0{
+		err = errors.New("Not Found")
 		return nil, err
 	}
-	laundro := toDomainArray(rec)
+	laundro := ToDomainArray(rec)
 	return laundro, nil
 }
 
@@ -42,8 +43,7 @@ func (mysqlRepo *mysqlLaundromatsRepository) GetByName(name string) ([]laundroma
 	err != nil{
 		return nil, err
 	}
-	fmt.Println(rec)
-	laundro := toDomainArray(rec)
+	laundro := ToDomainArray(rec)
 	return laundro, nil
 }
 

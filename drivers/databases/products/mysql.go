@@ -1,22 +1,25 @@
 package products
 
 import (
+	"errors"
+	"laundro-api-ca/business/laundromats"
 	"laundro-api-ca/business/products"
+	laundroRec "laundro-api-ca/drivers/databases/laundromats"
 
 	"gorm.io/gorm"
 )
 
-type mysqlProductRepository struct {
+type mysqlProductsRepository struct {
 	Conn *gorm.DB
 }
 
 func NewMySQLRepository(conn *gorm.DB) products.Repository {
-	return &mysqlProductRepository{
+	return &mysqlProductsRepository{
 		Conn: conn,
 	}
 }
 
-func (mysqlRepo *mysqlProductRepository) Insert(productData *products.Domain) (products.Domain, error){
+func (mysqlRepo *mysqlProductsRepository) Insert(productData *products.Domain) (products.Domain, error){
 	rec := FromDomain(*productData)
 	err := mysqlRepo.Conn.Create(&rec).Error
 	if err != nil {
@@ -25,7 +28,7 @@ func (mysqlRepo *mysqlProductRepository) Insert(productData *products.Domain) (p
 	return rec.toDomain(), nil
 }
 
-func (mysqlRepo *mysqlProductRepository) GetAllByLaundromat(laundroID uint) ([]products.Domain, error){
+func (mysqlRepo *mysqlProductsRepository) GetAllByLaundromat(laundroID uint) ([]products.Domain, error){
 	rec := []Products{}
 	err := mysqlRepo.Conn.Joins("Category").Find(&rec, "laundromat_id = ?", laundroID).Error
 	if err != nil {
@@ -35,7 +38,7 @@ func (mysqlRepo *mysqlProductRepository) GetAllByLaundromat(laundroID uint) ([]p
 	return products, nil
 }
 
-func (mysqlRepo *mysqlProductRepository) Update(id uint, productData *products.Domain) (products.Domain, error){
+func (mysqlRepo *mysqlProductsRepository) Update(id uint, productData *products.Domain) (products.Domain, error){
 	rec := FromDomain(*productData)
 	recData := *rec
 	
@@ -51,7 +54,7 @@ func (mysqlRepo *mysqlProductRepository) Update(id uint, productData *products.D
 	return rec.toDomain(), nil
 }
 
-func (mysqlRepo *mysqlProductRepository) Delete(id uint) (string, error){
+func (mysqlRepo *mysqlProductsRepository) Delete(id uint) (string, error){
 	rec := Products{}
 	err := mysqlRepo.Conn.Delete(&rec, "id = ?",id).Error
 	if err != nil {
@@ -60,7 +63,7 @@ func (mysqlRepo *mysqlProductRepository) Delete(id uint) (string, error){
 	return "Product Deleted", nil
 }
 
-func (mysqlRepo *mysqlProductRepository) GetCategoryID(name string) (int, error){
+func (mysqlRepo *mysqlProductsRepository) GetCategoryID(name string) (int, error){
 	rec := Category{}
 	err := mysqlRepo.Conn.First(&rec, "name = ?", name).Error
 	if err != nil {
@@ -69,11 +72,33 @@ func (mysqlRepo *mysqlProductRepository) GetCategoryID(name string) (int, error)
 	return rec.ID, nil
 }
 
-func (mysqlRepo *mysqlProductRepository) GetLaundromatID(id uint) uint{
+func (mysqlRepo *mysqlProductsRepository) GetLaundromatID(id uint) uint{
 	rec := Products{}
 	err := mysqlRepo.Conn.First(&rec, "id = ?",id).Error
 	if err != nil {
 		return 0
 	}
 	return rec.LaundromatID
+}
+
+func (mysqlRepo *mysqlProductsRepository) GetLaundromatByCategory(categoryId int) ([]laundromats.Domain, error){
+	recLaundro := []laundroRec.Laundromats{}
+	recProduct := []Products{}
+	err := mysqlRepo.Conn.Joins("Laundromat").Find(&recProduct, "category_id = ?", categoryId).Error
+	if len(recProduct) == 0{
+		err = errors.New("Not Found")
+		return []laundromats.Domain{}, err
+	}
+
+	idArray := []uint{}
+	for _, val := range recProduct{
+		idArray = append(idArray, val.LaundromatID)
+	}
+
+	err = mysqlRepo.Conn.Find(&recLaundro,idArray).Error
+	if err != nil {
+		return []laundromats.Domain{}, err
+	}
+	domain := laundroRec.ToDomainArray(recLaundro)
+	return domain, nil
 }

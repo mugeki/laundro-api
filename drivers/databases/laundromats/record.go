@@ -30,7 +30,7 @@ func (rec *Laundromats) toDomain() laundromats.Domain{
 	}
 }
 
-func toDomainArray(rec []Laundromats) []laundromats.Domain{
+func ToDomainArray(rec []Laundromats) []laundromats.Domain{
 	domain := []laundromats.Domain{}
 
 	for _, val := range rec{

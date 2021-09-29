@@ -82,3 +82,13 @@ func (ctrl *ProductController) GetLaundromatID(id uint) uint {
 	data := ctrl.productService.GetLaundromatID(id)
 	return data
 }
+
+func (ctrl *ProductController) GetLaundromatByCategory(c echo.Context) error {
+	param := c.Param("categoryId")
+	categoryID, _ := strconv.Atoi(param)
+	data, err := ctrl.productService.GetLaundromatByCategory(categoryID)
+	if len(data) == 0 {
+		return controller.NewErrorResponse(c, http.StatusNotFound, err)
+	}
+	return controller.NewSuccessResponse(c, data)
+}

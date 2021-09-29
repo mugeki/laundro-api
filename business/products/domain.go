@@ -1,6 +1,7 @@
 package products
 
 import (
+	"laundro-api-ca/business/laundromats"
 	"time"
 )
 
@@ -22,6 +23,7 @@ type Service interface{
 	Update(id uint, productData *Domain) (Domain, error)
 	Delete(id uint) (string, error)
 	GetLaundromatID(id uint) uint
+	GetLaundromatByCategory(categoryId int) ([]laundromats.Domain, error)
 }
 
 type Repository interface{
@@ -31,4 +33,5 @@ type Repository interface{
 	Delete(id uint) (string, error)
 	GetCategoryID(name string) (int, error)
 	GetLaundromatID(id uint) uint
+	GetLaundromatByCategory(categoryId int) ([]laundromats.Domain, error)
 }
