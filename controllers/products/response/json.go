@@ -2,7 +2,6 @@ package response
 
 import (
 	"laundro-api-ca/business/products"
-	"time"
 )
 
 type Products struct {
@@ -10,7 +9,7 @@ type Products struct {
 	Category    	string      `json:"category"`
 	KgLimit  		int         `json:"kg_limit"`
 	KgPrice 		int         `json:"kg_price"`
-	EstimatedTime 	time.Time 	`json:"estimated_time"`
+	EstimatedHour 	int		 	`json:"estimated_time"`
 }
 
 func FromDomain(domain products.Domain) Products {
@@ -19,7 +18,7 @@ func FromDomain(domain products.Domain) Products {
 		Category 	  : domain.CategoryName,
 		KgLimit  	  : domain.KgLimit,
 		KgPrice 	  : domain.KgPrice,
-		EstimatedTime : domain.EstimatedTime,
+		EstimatedHour : domain.EstimatedHour,
 	}
 }
 

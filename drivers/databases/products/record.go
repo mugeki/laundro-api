@@ -3,7 +3,6 @@ package products
 import (
 	"laundro-api-ca/business/products"
 	"laundro-api-ca/drivers/databases/laundromats"
-	"time"
 
 	"gorm.io/gorm"
 )
@@ -17,7 +16,7 @@ type Products struct {
 	gorm.Model
 	KgLimit        int          			`json:"kg_limit"`
 	KgPrice        int          			`json:"kg_price"`
-	EstimatedTime  time.Time    			`json:"estimated_time"`
+	EstimatedHour  int 			  			`json:"estimated_hour"`
 	CategoryID     int          			`json:"category_id"`
 	Category       Category 				`gorm:"constraint:OnUpdate:NO ACTION,OnDelete:RESTRICT;"`
 	LaundromatID   uint						`json:"laundromat_id"`
@@ -29,7 +28,7 @@ func (rec *Products) toDomain() products.Domain{
 		Id            : rec.ID,
 		KgLimit       : rec.KgLimit,
 		KgPrice       : rec.KgPrice,
-		EstimatedTime : rec.EstimatedTime,
+		EstimatedHour : rec.EstimatedHour,
 		CategoryID    : rec.CategoryID,
 		CategoryName  : rec.Category.Name,
 		CreatedAt     : rec.CreatedAt,
@@ -55,7 +54,7 @@ func FromDomain(domain products.Domain) *Products{
 		},
 		KgLimit       : domain.KgLimit,
 		KgPrice       : domain.KgPrice,
-		EstimatedTime : domain.EstimatedTime,
+		EstimatedHour : domain.EstimatedHour,
 		Category	  : Category{domain.CategoryID,domain.CategoryName},
 		LaundromatID  : domain.LaundromatID,
 	}

@@ -9,7 +9,7 @@ type Domain struct {
 	Id             uint
 	KgLimit        int
 	KgPrice        int
-	EstimatedTime  time.Time
+	EstimatedHour  int
 	CategoryID     int
 	CategoryName   string
 	LaundromatID   uint
