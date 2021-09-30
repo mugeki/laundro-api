@@ -8,7 +8,7 @@ type Products struct {
 	Category    	string      `json:"category"`
 	KgLimit  		int         `json:"kg_limit"`
 	KgPrice 		int         `json:"kg_price"`
-	EstimatedHour 	int		 	`json:"estimated_time"`
+	EstimatedHour 	int		 	`json:"estimated_hour"`
 }
 
 func (req *Products) ToDomain() (*products.Domain) {
