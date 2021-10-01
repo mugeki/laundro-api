@@ -72,6 +72,24 @@ func (mysqlRepo *mysqlProductsRepository) GetCategoryID(name string) (int, error
 	return rec.ID, nil
 }
 
+func (mysqlRepo *mysqlProductsRepository) GetCategoryNameByProductID(id uint) string{
+	rec := Products{}
+	err := mysqlRepo.Conn.Joins("Category").First(&rec, id).Error
+	if err != nil {
+		return ""
+	}
+	return rec.Category.Name
+}
+
+func (mysqlRepo *mysqlProductsRepository) GetByCategoryName(categoryName string) (products.Domain, error){
+	rec := Products{}
+	err := mysqlRepo.Conn.Joins("Laundromat").Joins("Category").First(&rec, "Category.name = ?", categoryName).Error
+	if err != nil {
+		return products.Domain{}, err
+	}
+	return rec.toDomain(), nil
+}
+
 func (mysqlRepo *mysqlProductsRepository) GetLaundromatID(id uint) uint{
 	rec := Products{}
 	err := mysqlRepo.Conn.First(&rec, "id = ?",id).Error

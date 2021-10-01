@@ -13,6 +13,7 @@ type Domain struct {
 	CategoryID     int
 	CategoryName   string
 	LaundromatID   uint
+	LaundromatName string
 	CreatedAt      time.Time
 	UpdatedAt      time.Time
 }
@@ -32,6 +33,8 @@ type Repository interface{
 	Update(id uint, productData *Domain) (Domain, error)
 	Delete(id uint) (string, error)
 	GetCategoryID(name string) (int, error)
+	GetCategoryNameByProductID(id uint) string
+	GetByCategoryName(categoryName string) (Domain, error)
 	GetLaundromatID(id uint) uint
 	GetLaundromatByCategory(categoryId int) ([]laundromats.Domain, error)
 }
