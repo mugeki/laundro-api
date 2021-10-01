@@ -2,23 +2,31 @@ package orders
 
 import (
 	"laundro-api-ca/business"
+	"laundro-api-ca/business/laundromats"
 	"laundro-api-ca/business/products"
 	"time"
 )
 
 type ordersService struct {
-	orderRepository		Repository
-	productRepository	products.Repository
+	orderRepository		 Repository
+	productRepository	 products.Repository
+	laundroRepository laundromats.Repository
 }
 
-func NewOrderService(orderRepo Repository, productRepo products.Repository) Service {
+func NewOrderService(orderRepo Repository, productRepo products.Repository, laundroRepo laundromats.Repository) Service {
 	return &ordersService{
 		orderRepository: orderRepo,
 		productRepository: productRepo,
+		laundroRepository: laundroRepo,
 	}
 }
 
 func (service *ordersService) Create(userId uint, orderData *Domain) (Domain, error) {
+	laundroOpen := service.laundroRepository.GetStatusByID(orderData.LaundromatID)
+	if !laundroOpen {
+		return Domain{}, business.ErrLaundromatNotAvailable
+	}
+
 	orderData.UserID = userId
 	productData, err := service.productRepository.GetByCategoryName(orderData.ProductName)
 	if err != nil {

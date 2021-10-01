@@ -29,6 +29,7 @@ type Repository interface{
 	GetByAddress(addressID []uint) ([]Domain, error)
 	GetByName(name string) ([]Domain, error)
 	GetByID(id uint) (Domain, error)
+	GetStatusByID(id uint) bool
 	Update(id uint, laundroData *Domain) (Domain, error)
 	Delete(id uint) (string, error)
 }

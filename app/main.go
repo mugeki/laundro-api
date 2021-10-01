@@ -96,7 +96,7 @@ func main() {
 	productCtrl := _productController.NewProductController(productService)
 
 	orderRepo := _driverFactory.NewOrderRepository(db)
-	orderService := _orderService.NewOrderService(orderRepo, productRepo)
+	orderService := _orderService.NewOrderService(orderRepo, productRepo, laundroRepo)
 	orderCtrl := _orderController.NewOrderController(orderService)
 
 	routesInit := _routes.ControllerList{
