@@ -56,10 +56,19 @@ func (mysqlRepo *mysqlLaundromatsRepository) GetByID(id uint) (laundromats.Domai
 	return rec.toDomain(), nil
 }
 
+func (mysqlRepo *mysqlLaundromatsRepository) GetStatusByID(id uint) bool {
+	rec := Laundromats{}
+	err := mysqlRepo.Conn.First(&rec,id).Error
+	if err != nil {
+		return false
+	}
+	return rec.toDomain().Status
+}
+
 func (mysqlRepo *mysqlLaundromatsRepository) Update(id uint, laundroData *laundromats.Domain) (laundromats.Domain, error){
 	rec := fromDomain(*laundroData)
 	recData := *rec
-	if err := mysqlRepo.Conn.First(&rec, "id = ?",id).Updates(recData).Error
+	if err := mysqlRepo.Conn.First(&rec, "id = ?",id).Updates(recData).Update("status",recData.Status).Error
 	err != nil{
 		return laundromats.Domain{}, err
 	}

@@ -8,6 +8,7 @@ var (
 	ErrInternalServer = errors.New("Something went wrong")
 	ErrNearestLaundromatNotFound = errors.New("No laundromat found within your area")
 	ErrLaundromatNotFound = errors.New("Laundromat not found")
+	ErrLaundromatNotAvailable = errors.New("Laundromat not available")
 	ErrUnauthorized = errors.New("User Unauthorized")
 	ErrProductNotFound = errors.New("Product not found")
 	ErrInvalidProductCategory = errors.New("Invalid category")
