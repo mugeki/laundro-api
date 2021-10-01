@@ -19,6 +19,10 @@ import (
 	_productController "laundro-api-ca/controllers/products"
 	_productRepo "laundro-api-ca/drivers/databases/products"
 
+	_orderService "laundro-api-ca/business/orders"
+	_orderController "laundro-api-ca/controllers/orders"
+	_orderRepo "laundro-api-ca/drivers/databases/orders"
+
 	_dbDriver "laundro-api-ca/drivers/mysql"
 
 	_middleware "laundro-api-ca/app/middleware"
@@ -48,11 +52,14 @@ func dbMigrate(db *gorm.DB) {
 		&_userRepo.Users{},
 		&_productRepo.Products{},
 		&_laundroRepo.Laundromats{},
+		&_orderRepo.Orders{},
 	)
 	roles := []_userRepo.Roles{{ID: 1, Name: "Customer"},{ID: 2, Name: "Owner"}}
 	categories := []_productRepo.Category{{ID: 1, Name: "Kiloan"},{ID: 2, Name: "Dry Clean"},{ID: 3, Name: "Cuci Sepatu"}}
+	payments := []_orderRepo.Payment{{ID: 1, Gateway: "Gopay"},{ID: 2, Gateway: "OVO"}}
 	db.Create(&roles)
 	db.Create(&categories)
+	db.Create(&payments)
 }
 
 func main() {
@@ -88,11 +95,16 @@ func main() {
 	productService := _productService.NewProductService(productRepo)
 	productCtrl := _productController.NewProductController(productService)
 
+	orderRepo := _driverFactory.NewOrderRepository(db)
+	orderService := _orderService.NewOrderService(orderRepo, productRepo)
+	orderCtrl := _orderController.NewOrderController(orderService)
+
 	routesInit := _routes.ControllerList{
 		JWTMiddleware:        configJWT.Init(),
 		UserController:       *userCtrl,
 		LaundromatController: *laundroCtrl,
 		ProductController:    *productCtrl,
+		OrderController:	  *orderCtrl,
 	}
 	routesInit.RouteRegister(e)
 

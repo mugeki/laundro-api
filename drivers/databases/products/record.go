@@ -31,6 +31,8 @@ func (rec *Products) toDomain() products.Domain{
 		EstimatedHour : rec.EstimatedHour,
 		CategoryID    : rec.CategoryID,
 		CategoryName  : rec.Category.Name,
+		LaundromatID  : rec.LaundromatID,
+		LaundromatName: rec.Laundromat.Name,
 		CreatedAt     : rec.CreatedAt,
 		UpdatedAt     : rec.UpdatedAt,
 	}

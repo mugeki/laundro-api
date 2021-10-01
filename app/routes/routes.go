@@ -5,6 +5,7 @@ import (
 	"laundro-api-ca/business"
 	controller "laundro-api-ca/controllers"
 	"laundro-api-ca/controllers/laundromats"
+	"laundro-api-ca/controllers/orders"
 	"laundro-api-ca/controllers/products"
 	"laundro-api-ca/controllers/users"
 	"net/http"
@@ -19,6 +20,7 @@ type ControllerList struct {
 	UserController       users.UserController
 	LaundromatController laundromats.LaundromatController
 	ProductController	 products.ProductController
+	OrderController		 orders.OrderController
 }
 
 func (ctrlList *ControllerList) RouteRegister(e *echo.Echo) {
@@ -45,6 +47,10 @@ func (ctrlList *ControllerList) RouteRegister(e *echo.Echo) {
 	productsAdmin.POST("/to/:id", ctrlList.ProductController.Insert)
 	productsAdmin.PUT("/edit/:productId", ctrlList.ProductController.Update, OwnerValidation(ctrlList.LaundromatController, ctrlList.ProductController))
 	productsAdmin.DELETE("/:productId", ctrlList.ProductController.Delete, OwnerValidation(ctrlList.LaundromatController, ctrlList.ProductController))
+
+	orders := e.Group("orders", middleware.JWTWithConfig(ctrlList.JWTMiddleware))
+	orders.POST("", ctrlList.OrderController.Create)
+	orders.GET("/get", ctrlList.OrderController.GetByUserID)
 }
 
 func RoleValidation(roleID int, userController users.UserController) echo.MiddlewareFunc {
