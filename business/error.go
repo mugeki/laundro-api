@@ -5,6 +5,7 @@ import "errors"
 var (
 	ErrDuplicateData = errors.New("Data already exist")
 	ErrInvalidLoginInfo = errors.New("Username or password is invalid")
+	ErrUserNotFound = errors.New("User not found")
 	ErrInternalServer = errors.New("Something went wrong")
 	ErrNearestLaundromatNotFound = errors.New("No laundromat found within your area")
 	ErrLaundromatNotFound = errors.New("Laundromat not found")
