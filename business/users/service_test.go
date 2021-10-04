@@ -2,7 +2,6 @@ package users_test
 
 import (
 	"laundro-api-ca/app/middleware"
-	"laundro-api-ca/business"
 	"laundro-api-ca/business/addresses"
 	_addressMock "laundro-api-ca/business/addresses/mocks"
 	"laundro-api-ca/business/users"
@@ -30,14 +29,14 @@ func TestMain(m *testing.M){
 	userService = users.NewUserService(&mockUserRepository, &mockAddrRepository, &middleware.ConfigJWT{})
 	hashedPassword, _ = encrypt.Hash("test")
 	userDomain = users.Domain{
-		Username: "testUser",
-		Password: hashedPassword,
-		Email: "test@gmail.com",
-		Fullname: "Test John",
-		DateOfBirth: time.Now(),
-		PhoneNumber: "123456789",
-		RoleID: 1,
-		AddressID: 1,
+		Username	: "testUser",
+		Password	: hashedPassword,
+		Email		: "test@gmail.com",
+		Fullname	: "Test John",
+		DateOfBirth	: time.Now(),
+		PhoneNumber	: "123456789",
+		RoleID		: 1,
+		AddressID	: 1,
 	}
 	addressDomain = addresses.Domain{
 		ID         : 1,
@@ -78,7 +77,7 @@ func TestRegister(t *testing.T){
 	})
 	t.Run("Invalid Test | Duplicate User", func(t *testing.T){
 		mockAddrRepository.On("Insert", mock.Anything).Return(addressDomain, nil).Once()
-		mockUserRepository.On("Register", mock.Anything).Return(users.Domain{}, business.ErrDuplicateData).Once()
+		mockUserRepository.On("Register", mock.Anything).Return(users.Domain{}, assert.AnError).Once()
 
 		inputUser := users.Domain{
 			Username    : "testUser",
@@ -104,7 +103,7 @@ func TestRegister(t *testing.T){
 	})
 	t.Run("Invalid Test | Internal Error", func(t *testing.T){
 		mockAddrRepository.On("Insert", mock.Anything).Return(addressDomain, nil).Once()
-		mockUserRepository.On("Register", mock.Anything).Return(users.Domain{}, business.ErrInternalServer).Once()
+		mockUserRepository.On("Register", mock.Anything).Return(users.Domain{}, assert.AnError).Once()
 
 		inputUser := users.Domain{
 			Username    : "testUser",
@@ -145,7 +144,7 @@ func TestLogin(t *testing.T){
 		assert.NotEmpty(t, resp)
 	})
 	t.Run("Invalid Test | Wrong Username", func(t *testing.T){
-		mockUserRepository.On("GetByUsername", mock.AnythingOfType("string")).Return(users.Domain{}, business.ErrInvalidLoginInfo).Once()
+		mockUserRepository.On("GetByUsername", mock.AnythingOfType("string")).Return(users.Domain{}, assert.AnError).Once()
 		
 		input := users.Domain{
 			Username    : "testUser",
@@ -159,7 +158,7 @@ func TestLogin(t *testing.T){
 	})
 	t.Run("Invalid Test | Wrong Password", func(t *testing.T){
 		mockUserRepository.On("GetByUsername", mock.AnythingOfType("string")).Return(userDomain, nil).Once()
-		mockEncrypt.On("ValidateHash", mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return("", business.ErrInvalidLoginInfo)
+		mockEncrypt.On("ValidateHash", mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return("", assert.AnError)
 
 		input := users.Domain{
 			Username    : "testUser",
@@ -183,7 +182,7 @@ func TestGetByID(t *testing.T){
 		assert.Equal(t, userDomain, resp)
 	})
 	t.Run("Invalid Test | User Not Found", func(t *testing.T){
-		mockUserRepository.On("GetByID", mock.AnythingOfType("uint")).Return(users.Domain{}, business.ErrUserNotFound).Once()
+		mockUserRepository.On("GetByID", mock.AnythingOfType("uint")).Return(users.Domain{}, assert.AnError).Once()
 
 		resp, err := userService.GetByID(2)
 

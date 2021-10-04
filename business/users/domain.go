@@ -6,17 +6,17 @@ import (
 )
 
 type Domain struct {
-	Id          uint
-	Username    string    
-	Password    string    
-	Email       string    
-	Fullname    string    
-	DateOfBirth time.Time 
-	PhoneNumber string    
-	RoleID      uint      
-	AddressID   uint      
-	CreatedAt   time.Time
-	UpdatedAt	time.Time
+	Id          uint		`json:"id"`	
+	Username    string    	`json:"username"`
+	Password    string    	`json:"password"`
+	Email       string    	`json:"email"`
+	Fullname    string    	`json:"fullname"`
+	DateOfBirth time.Time 	`json:"date_of_birth"`
+	PhoneNumber string    	`json:"phone_number"`
+	RoleID      uint      	`json:"role_id"`
+	AddressID   uint      	`json:"address_id"`
+	CreatedAt   time.Time	`json:"created_at"`
+	UpdatedAt	time.Time	`json:"updated_at"`
 }
 
 type Service interface {

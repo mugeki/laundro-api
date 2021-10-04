@@ -1,7 +1,6 @@
 package laundromats_test
 
 import (
-	"laundro-api-ca/business"
 	"laundro-api-ca/business/addresses"
 	_addressMock "laundro-api-ca/business/addresses/mocks"
 	"laundro-api-ca/business/geolocation"
@@ -95,7 +94,7 @@ func TestInsert(t *testing.T){
 	})
 	t.Run("Invalid Test", func(t *testing.T){
 		mockAddressRepository.On("Insert", mock.Anything).Return(addressNewDomain, nil).Once()
-		mockLaundroRepository.On("Insert", mock.Anything).Return(laundromats.Domain{}, business.ErrDuplicateData).Once()
+		mockLaundroRepository.On("Insert", mock.Anything).Return(laundromats.Domain{}, assert.AnError).Once()
 
 		input := laundromats.Domain{
 			Name      : "Test Laundro",
@@ -121,7 +120,7 @@ func TestGetByIP(t *testing.T){
 		assert.Contains(t, resp, laundroDomain)
 	})
 	t.Run("Invalid Test | Location Not Found", func(t *testing.T){
-		mockGeoRepository.On("GetLocationByIP").Return(geolocation.Domain{}, business.ErrInternalServer).Once()
+		mockGeoRepository.On("GetLocationByIP").Return(geolocation.Domain{}, assert.AnError).Once()
 
 		resp, err := laundroService.GetByIP()
 
@@ -130,7 +129,7 @@ func TestGetByIP(t *testing.T){
 	})
 	t.Run("Invalid Test | Addresses Not Found", func(t *testing.T){
 		mockGeoRepository.On("GetLocationByIP").Return(geoDomain, nil).Once()
-		mockAddressRepository.On("FindByCity", mock.AnythingOfType("string")).Return([]addresses.Domain{}, business.ErrNearestLaundromatNotFound).Once()
+		mockAddressRepository.On("FindByCity", mock.AnythingOfType("string")).Return([]addresses.Domain{}, assert.AnError).Once()
 
 		resp, err := laundroService.GetByIP()
 
@@ -140,7 +139,7 @@ func TestGetByIP(t *testing.T){
 	t.Run("Invalid Test | Laundromat Not Found", func(t *testing.T){
 		mockGeoRepository.On("GetLocationByIP").Return(geoDomain, nil).Once()
 		mockAddressRepository.On("FindByCity", mock.AnythingOfType("string")).Return([]addresses.Domain{addressDomain}, nil).Once()
-		mockLaundroRepository.On("GetByAddress", mock.AnythingOfType("[]uint")).Return([]laundromats.Domain{}, business.ErrNearestLaundromatNotFound).Once()
+		mockLaundroRepository.On("GetByAddress", mock.AnythingOfType("[]uint")).Return([]laundromats.Domain{}, assert.AnError).Once()
 
 		resp, err := laundroService.GetByIP()
 
@@ -159,7 +158,7 @@ func TestGetByName(t *testing.T){
 		assert.Contains(t, resp, laundroDomain)
 	})
 	t.Run("Invalid Test", func(t *testing.T){
-		mockLaundroRepository.On("GetByName", mock.AnythingOfType("string")).Return([]laundromats.Domain{}, business.ErrLaundromatNotFound).Once()
+		mockLaundroRepository.On("GetByName", mock.AnythingOfType("string")).Return([]laundromats.Domain{}, assert.AnError).Once()
 
 		resp, err := laundroService.GetByName("Laundry")
 
@@ -177,7 +176,7 @@ func TestGetByID(t *testing.T){
 		assert.Equal(t, laundroDomain, resp)
 	})
 	t.Run("Invalid Test", func(t *testing.T){
-		mockLaundroRepository.On("GetByID", mock.AnythingOfType("uint")).Return(laundromats.Domain{}, business.ErrLaundromatNotFound).Once()
+		mockLaundroRepository.On("GetByID", mock.AnythingOfType("uint")).Return(laundromats.Domain{}, assert.AnError).Once()
 
 		resp, err := laundroService.GetByID(1)
 
@@ -217,7 +216,7 @@ func TestUpdate(t *testing.T){
 	})
 	t.Run("Invalid Test", func(t *testing.T){
 		mockAddressRepository.On("Insert", mock.Anything).Return(addressDomain, nil).Once()
-		mockLaundroRepository.On("Update", mock.AnythingOfType("uint"), mock.Anything).Return(laundroDomain, business.ErrLaundromatNotFound).Once()
+		mockLaundroRepository.On("Update", mock.AnythingOfType("uint"), mock.Anything).Return(laundroDomain, assert.AnError).Once()
 
 		resp, err := laundroService.Update(2, &laundroDomain, &addressDomain)
 
@@ -235,7 +234,7 @@ func TestDelete(t *testing.T){
 		assert.Equal(t, "Laundromat Deleted", resp)
 	})
 	t.Run("Invalid Test", func(t *testing.T){
-		mockLaundroRepository.On("Delete", mock.Anything).Return("", business.ErrLaundromatNotFound).Once()
+		mockLaundroRepository.On("Delete", mock.Anything).Return("", assert.AnError).Once()
 
 		resp, err := laundroService.Delete(1)
 

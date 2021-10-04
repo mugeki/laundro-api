@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/asaskevich/govalidator"
 	"github.com/labstack/echo/v4"
 )
 
@@ -24,6 +25,10 @@ func NewProductController(service products.Service) *ProductController {
 func (ctrl *ProductController) Insert(c echo.Context) error {
 	req := request.Products{}
 	if err := c.Bind(&req); err != nil {
+		return controller.NewErrorResponse(c, http.StatusBadRequest, err)
+	}
+
+	if _, err := govalidator.ValidateStruct(req); err != nil {
 		return controller.NewErrorResponse(c, http.StatusBadRequest, err)
 	}
 
@@ -56,6 +61,10 @@ func (ctrl *ProductController) Update(c echo.Context) error {
 		return controller.NewErrorResponse(c, http.StatusBadRequest, err)
 	}
 
+	if _, err := govalidator.ValidateStruct(req); err != nil {
+		return controller.NewErrorResponse(c, http.StatusBadRequest, err)
+	}
+	
 	param := c.Param("productId")
 	productID, _ := strconv.Atoi(param)
 	
@@ -72,7 +81,7 @@ func (ctrl *ProductController) Delete(c echo.Context) error {
 	productID, _ := strconv.Atoi(param)
 	data, err := ctrl.productService.Delete(uint(productID))
 	if err != nil {
-		return controller.NewErrorResponse(c, http.StatusInternalServerError, err)
+		return controller.NewErrorResponse(c, http.StatusNotFound, err)
 	}
 
 	return controller.NewSuccessResponse(c, data)

@@ -8,19 +8,19 @@ import (
 )
 
 type Users struct {			
-	Username    string    			`json:"username"`
-	Password    string    			`json:"password"`
-	Email       string    			`json:"email"`
-	Fullname    string    			`json:"fullname"`
-	DateOfBirth time.Time 			`json:"date_of_birth"`
-	PhoneNumber string    			`json:"phone_number"`
-	RoleID      uint    			`json:"role_id"`
-	Address		request.Addresses	`json:"address"`
+	Username    string    			`json:"username" valid:"required,minstringlength(6)"`
+	Password    string    			`json:"password" valid:"required,minstringlength(6)"`
+	Email       string    			`json:"email" valid:"required,email"`
+	Fullname    string    			`json:"fullname" valid:"required,minstringlength(3)"`
+	DateOfBirth time.Time 			`json:"date_of_birth" valid:"required"`
+	PhoneNumber string    			`json:"phone_number" valid:"required,stringlength(8|15)"`
+	RoleID      uint    			`json:"role_id" valid:"required"`
+	Address		request.Addresses	`json:"address" valid:"required"`
 }
 
 type UsersLogin struct{
-	Username    string   `json:"username"`
-	Password    string   `json:"password"`
+	Username    string    			`json:"username" valid:"required,minstringlength(6)"`
+	Password    string    			`json:"password" valid:"required,minstringlength(6)"`
 }
 
 func (req *Users) ToDomain() (*users.Domain, *addresses.Domain) {

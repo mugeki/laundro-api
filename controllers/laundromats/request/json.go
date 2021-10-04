@@ -7,16 +7,14 @@ import (
 )
 
 type Laundromats struct {
-	Name    string            `json:"name"`
-	Status  bool              `json:"status"`
-	OwnerID uint              `json:"owner_id"`
-	Address request.Addresses `json:"address"`
+	Name    string            `json:"name" valid:"required,minstringlength(3)"`
+	Status  bool              `json:"status" valid:"-"`
+	Address request.Addresses `json:"address" valid:"required"`
 }
 
 func (req *Laundromats) ToDomain() (*laundromats.Domain, *addresses.Domain) {
 	return &laundromats.Domain{
 		Name      : req.Name,
-		OwnerID   : req.OwnerID,
 		Status    : req.Status,
 	}, &addresses.Domain{
 		Street		: req.Address.Street,

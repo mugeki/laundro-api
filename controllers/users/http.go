@@ -6,6 +6,7 @@ import (
 	"laundro-api-ca/controllers/users/request"
 	"net/http"
 
+	"github.com/asaskevich/govalidator"
 	"github.com/labstack/echo/v4"
 )
 
@@ -21,7 +22,11 @@ func NewUserController(service users.Service) *UserController{
 
 func (ctrl *UserController) Register(c echo.Context) error{
 	req := request.Users{}
-	if err := c.Bind(&req); err != nil {
+	if err := c.Bind(&req); err != nil{
+		return controller.NewErrorResponse(c, http.StatusBadRequest, err)
+	}
+
+	if _, err := govalidator.ValidateStruct(req); err != nil {
 		return controller.NewErrorResponse(c, http.StatusBadRequest, err)
 	}
 
@@ -36,6 +41,10 @@ func (ctrl *UserController) Register(c echo.Context) error{
 func (ctrl *UserController) Login(c echo.Context) error{
 	req := request.UsersLogin{}
 	if err := c.Bind(&req); err != nil {
+		return controller.NewErrorResponse(c, http.StatusBadRequest, err)
+	}
+
+	if _, err := govalidator.ValidateStruct(req); err != nil {
 		return controller.NewErrorResponse(c, http.StatusBadRequest, err)
 	}
 

@@ -1,7 +1,6 @@
 package orders_test
 
 import (
-	"laundro-api-ca/business"
 	_laundroMock "laundro-api-ca/business/laundromats/mocks"
 	"laundro-api-ca/business/orders"
 	_orderMock "laundro-api-ca/business/orders/mocks"
@@ -88,7 +87,7 @@ func TestCreate(t *testing.T) {
 	})
 	t.Run("Invalid Test | Laundromat Closed", func(t *testing.T) {
 		mockLaundroRepository.On("GetStatusByID", mock.AnythingOfType("uint")).Return(true).Once()
-		mockProductRepository.On("GetByCategoryName", mock.AnythingOfType("string")).Return(products.Domain{}, business.ErrInvalidProductCategory).Once()
+		mockProductRepository.On("GetByCategoryName", mock.AnythingOfType("string")).Return(products.Domain{}, assert.AnError).Once()
 
 		input := orders.Domain{
 			LaundromatID: 1,
@@ -121,7 +120,7 @@ func TestCreate(t *testing.T) {
 	t.Run("Invalid Test | Invalid Payment", func(t *testing.T) {
 		mockLaundroRepository.On("GetStatusByID", mock.AnythingOfType("uint")).Return(true).Once()
 		mockProductRepository.On("GetByCategoryName", mock.AnythingOfType("string")).Return(productDomain, nil).Once()
-		mockOrderRepository.On("GetPaymentGateway", mock.AnythingOfType("int")).Return("", business.ErrInvalidPayment).Once()
+		mockOrderRepository.On("GetPaymentGateway", mock.AnythingOfType("int")).Return("", assert.AnError).Once()
 
 		input := orders.Domain{
 			LaundromatID: 1,
@@ -139,7 +138,7 @@ func TestCreate(t *testing.T) {
 		mockLaundroRepository.On("GetStatusByID", mock.AnythingOfType("uint")).Return(true).Once()
 		mockProductRepository.On("GetByCategoryName", mock.AnythingOfType("string")).Return(productDomain, nil).Once()
 		mockOrderRepository.On("GetPaymentGateway", mock.AnythingOfType("int")).Return("Test Gateway", nil).Once()
-		mockOrderRepository.On("Create", mock.Anything, mock.Anything).Return(orders.Domain{}, business.ErrInternalServer).Once()
+		mockOrderRepository.On("Create", mock.Anything, mock.Anything).Return(orders.Domain{}, assert.AnError).Once()
 
 		input := orders.Domain{
 			LaundromatID: 1,
@@ -166,7 +165,7 @@ func TestGetByUserID(t *testing.T){
 		assert.Contains(t, resp, orderDomain)
 	})
 	t.Run("Invalid Test | No Order", func(t *testing.T){
-		mockOrderRepository.On("GetByUserID", mock.AnythingOfType("uint")).Return([]orders.Domain{}, business.ErrOrdersNotFound).Once()
+		mockOrderRepository.On("GetByUserID", mock.AnythingOfType("uint")).Return([]orders.Domain{}, assert.AnError).Once()
 
 		resp, err := orderService.GetByUserID(1)
 

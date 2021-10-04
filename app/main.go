@@ -28,6 +28,7 @@ import (
 	_middleware "laundro-api-ca/app/middleware"
 	_routes "laundro-api-ca/app/routes"
 
+	"github.com/asaskevich/govalidator"
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
@@ -43,6 +44,7 @@ func init() {
 	if viper.GetBool(`debug`) {
 		log.Println("Service RUN on DEBUG mode")
 	}
+	govalidator.SetFieldsRequiredByDefault(true)
 }
 
 func dbMigrate(db *gorm.DB) {

@@ -6,13 +6,13 @@ import (
 )
 
 type Domain struct {
-	Id        uint
-	Name      string
-	OwnerID   uint
-	AddressID uint
-	Status    bool
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	Id        uint		`json:"id"`
+	Name      string	`json:"name"`
+	OwnerID   uint		`json:"owner_id"`
+	AddressID uint		`json:"address_id"`
+	Status    bool		`json:"status"`
+	CreatedAt time.Time	`json:"created_at"`
+	UpdatedAt time.Time	`json:"updated_at"`
 }
 
 type Service interface{
