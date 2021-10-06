@@ -2,7 +2,6 @@ package middleware
 
 import (
 	controller "laundro-api-ca/controllers"
-	"log"
 	"net/http"
 	"time"
 
@@ -45,7 +44,6 @@ func (jwtConf *ConfigJWT) GenerateToken(userID int) string {
 
 func GetUser(c echo.Context) *JwtCustomClaims {
 	user := c.Get("user").(*jwt.Token)
-	log.Println(c.Get("user"))
 	claims := user.Claims.(*JwtCustomClaims)
 	return claims
 }

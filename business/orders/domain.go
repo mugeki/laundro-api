@@ -1,7 +1,6 @@
 package orders
 
 import (
-	"laundro-api-ca/business/products"
 	"time"
 )
 
@@ -26,7 +25,7 @@ type Service interface {
 }
 
 type Repository interface {
-	Create(orderData *Domain, productData *products.Domain) (Domain, error)
+	Create(orderData *Domain) (Domain, error)
 	GetByUserID(userId uint) ([]Domain, error)
 	GetPaymentGateway(paymentId int) (string, error)
 }

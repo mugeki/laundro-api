@@ -25,6 +25,7 @@ import (
 
 	_dbDriver "laundro-api-ca/drivers/mysql"
 
+	"laundro-api-ca/app/middleware"
 	_middleware "laundro-api-ca/app/middleware"
 	_routes "laundro-api-ca/app/routes"
 
@@ -109,6 +110,7 @@ func main() {
 		OrderController:	  *orderCtrl,
 	}
 	routesInit.RouteRegister(e)
-
+	middleware.Logger(e)
+	
 	log.Fatal(e.Start(viper.GetString("server.address")))
 }

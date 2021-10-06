@@ -56,7 +56,7 @@ func TestCreate(t *testing.T) {
 		mockLaundroRepository.On("GetStatusByID", mock.AnythingOfType("uint")).Return(true).Once()
 		mockProductRepository.On("GetByCategoryName", mock.AnythingOfType("string")).Return(productDomain, nil).Once()
 		mockOrderRepository.On("GetPaymentGateway", mock.AnythingOfType("int")).Return("Test Gateway", nil).Once()
-		mockOrderRepository.On("Create", mock.Anything, mock.Anything).Return(orderDomain, nil).Once()
+		mockOrderRepository.On("Create", mock.Anything).Return(orderDomain, nil).Once()
 
 		input := orders.Domain{
 			LaundromatID: 1,
@@ -138,7 +138,7 @@ func TestCreate(t *testing.T) {
 		mockLaundroRepository.On("GetStatusByID", mock.AnythingOfType("uint")).Return(true).Once()
 		mockProductRepository.On("GetByCategoryName", mock.AnythingOfType("string")).Return(productDomain, nil).Once()
 		mockOrderRepository.On("GetPaymentGateway", mock.AnythingOfType("int")).Return("Test Gateway", nil).Once()
-		mockOrderRepository.On("Create", mock.Anything, mock.Anything).Return(orders.Domain{}, assert.AnError).Once()
+		mockOrderRepository.On("Create", mock.Anything).Return(orders.Domain{}, assert.AnError).Once()
 
 		input := orders.Domain{
 			LaundromatID: 1,
