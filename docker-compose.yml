@@ -1,0 +1,22 @@
+version: "3.9"
+
+services:
+  database_mysql:
+    image: mysql:latest
+    restart: "no"
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+
+  laundroapi:
+    container_name: laundro-api
+    build: .
+    restart: "no"
+    ports:
+      - 8005:8000
+    volumes:
+      - .:/user/src/app

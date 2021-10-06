@@ -2,6 +2,8 @@ package main
 
 import (
 	"log"
+	"os"
+	"strconv"
 
 	_driverFactory "laundro-api-ca/drivers"
 
@@ -29,24 +31,11 @@ import (
 	_middleware "laundro-api-ca/app/middleware"
 	_routes "laundro-api-ca/app/routes"
 
-	"github.com/asaskevich/govalidator"
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/spf13/viper"
 	"gorm.io/gorm"
 )
-
-func init() {
-	viper.SetConfigFile(`app/config/config.json`)
-	err := viper.ReadInConfig()
-	if err != nil {
-		panic(err)
-	}
-
-	if viper.GetBool(`debug`) {
-		log.Println("Service RUN on DEBUG mode")
-	}
-	govalidator.SetFieldsRequiredByDefault(true)
-}
 
 func dbMigrate(db *gorm.DB) {
 	db.AutoMigrate(
@@ -66,19 +55,25 @@ func dbMigrate(db *gorm.DB) {
 }
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		panic(err)
+	}
+
 	configDB := _dbDriver.ConfigDB{
-		DB_Username: viper.GetString(`database.user`),
-		DB_Password: viper.GetString(`database.pass`),
-		DB_Host:     viper.GetString(`database.host`),
-		DB_Port:     viper.GetString(`database.port`),
-		DB_Database: viper.GetString(`database.name`),
+		DB_Username: os.Getenv("DB_USER"),
+		DB_Password: os.Getenv("DB_PASSWORD"),
+		DB_Host:     os.Getenv("DB_HOST"),
+		DB_Port:     os.Getenv("DB_PORT"),
+		DB_Database: os.Getenv("DB_NAME"),
 	}
 	db := configDB.InitDB()
 	dbMigrate(db)
 
+	EXPIRE, _ := strconv.Atoi(os.Getenv("JWT_EXPIRE"))
 	configJWT := _middleware.ConfigJWT{
-		SecretJWT:       viper.GetString(`jwt.secret`),
-		ExpiresDuration: int64(viper.GetInt(`jwt.expired`)),
+		SecretJWT:       os.Getenv("JWT_SECRET"),
+		ExpiresDuration: int64(EXPIRE),
 	}
 
 	e := echo.New()
