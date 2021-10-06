@@ -33,7 +33,6 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
-	"github.com/spf13/viper"
 	"gorm.io/gorm"
 )
 
@@ -55,10 +54,7 @@ func dbMigrate(db *gorm.DB) {
 }
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		panic(err)
-	}
+	_ = godotenv.Load()
 
 	configDB := _dbDriver.ConfigDB{
 		DB_Username: os.Getenv("DB_USER"),
@@ -107,5 +103,5 @@ func main() {
 	routesInit.RouteRegister(e)
 	middleware.Logger(e)
 	
-	log.Fatal(e.Start(viper.GetString("server.address")))
+	log.Fatal(e.Start(os.Getenv("SERVER")))
 }
