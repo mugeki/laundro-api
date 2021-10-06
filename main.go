@@ -103,5 +103,9 @@ func main() {
 	routesInit.RouteRegister(e)
 	middleware.Logger(e)
 	
-	log.Fatal(e.Start(os.Getenv("SERVER")))
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8000"
+	}
+	log.Fatal(e.Start(":"+port))
 }
