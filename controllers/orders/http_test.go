@@ -53,7 +53,7 @@ func TestMain(m *testing.M){
 	}`
 	orderDomain = _order.Domain{
 		ID                  : 1,
-		CreatedAt           : time.Now(),
+		CreatedAt           : time.Date(2001,time.January,1,0,0,0,0,time.Local),
 		UserID              : 1,
 		LaundromatID        : 1,
 		LaundromatName		: "Test Laundry",
@@ -61,13 +61,13 @@ func TestMain(m *testing.M){
 		PaymentGateway		: "Test Payment",
 		ProductID           : 1,
 		ProductName			: "Test Product",
-		EstimatedFinishTime : time.Now(),
+		EstimatedFinishTime : time.Date(2001,time.January,1,0,0,0,0,time.Local),
 		Weight              : 4,
 		TotalPrice          : 20000,
 	}
 	orderRes = response.Orders{
 		ID                  : 1,
-		CreatedAt           : time.Now(),
+		CreatedAt           : time.Date(2001,time.January,1,0,0,0,0,time.Local),
 		UserID              : 1,
 		LaundromatID        : 1,
 		LaundromatName		: "Test Laundry",
@@ -75,7 +75,7 @@ func TestMain(m *testing.M){
 		PaymentGateway		: "Test Payment",
 		ProductID           : 1,
 		ProductName			: "Test Product",
-		EstimatedFinishTime : time.Now(),
+		EstimatedFinishTime : time.Date(2001,time.January,1,0,0,0,0,time.Local),
 		Weight              : 4,
 		TotalPrice          : 20000,
 	}
