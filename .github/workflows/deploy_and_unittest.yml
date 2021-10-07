@@ -75,6 +75,13 @@ jobs:
           export DB_NAME='"'$DB_NAME'"' && \
           export JWT_SECRET='"'$JWT_SECRET'"' && \
           export JWT_EXPIRED='"'$JWT_EXPIRED'"' && \
+          echo $DB_USER && \
+          echo $DB_PASSWORD && \
+          echo $DB_HOST && \
+          echo $DB_PORT && \
+          echo $DB_NAME && \
+          echo $JWT_SECRET && \
+          echo $JWT_EXPIRED && \
           docker rm -vf $(docker ps -a -q) && \
           docker pull mugeki/laundro-api:1.0.0 && \
           docker run -d -p 8000:8000 --name laundro-api \
