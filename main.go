@@ -66,13 +66,15 @@ func main() {
 	db := configDB.InitDB()
 	dbMigrate(db)
 
+	log.Println(configDB)
+
 	EXPIRE, _ := strconv.Atoi(os.Getenv("JWT_EXPIRE"))
-	log.Println("jwt expire: ",EXPIRE)
 	configJWT := _middleware.ConfigJWT{
 		SecretJWT:       os.Getenv("JWT_SECRET"),
 		ExpiresDuration: int64(EXPIRE),
 	}
-
+	log.Println("jwt expire: ",EXPIRE)
+	log.Println("jwt secret: ",configJWT.SecretJWT)
 	e := echo.New()
 
 	addrRepo := _driverFactory.NewAddressRepository(db)
