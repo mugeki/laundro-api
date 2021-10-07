@@ -67,6 +67,7 @@ func main() {
 	dbMigrate(db)
 
 	EXPIRE, _ := strconv.Atoi(os.Getenv("JWT_EXPIRE"))
+	log.Println("jwt expire: ",EXPIRE)
 	configJWT := _middleware.ConfigJWT{
 		SecretJWT:       os.Getenv("JWT_SECRET"),
 		ExpiresDuration: int64(EXPIRE),

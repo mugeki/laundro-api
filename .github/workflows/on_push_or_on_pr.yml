@@ -3,10 +3,10 @@ name: AWS EC2 CI/ID
 on:
   push:
     branches:
-      - "main"
+      - "bugfix"
   pull_request:
     branches:
-      - "main"
+      - "bugfix"
 
 jobs:
   unit-test:
