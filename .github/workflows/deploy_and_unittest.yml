@@ -35,7 +35,7 @@ jobs:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Push image to docker hub
-        run: docker push mugeki/laundroapi:1.0.0
+        run: docker push mugeki/laundro-api:1.0.0
 
   deployment-ec2-aws:
     name: Deploy to AWS EC2
@@ -69,7 +69,7 @@ jobs:
       - name: Connect to EC2 instance & run Docker image from registry
         run: |
           ssh development 'docker rm -vf $(docker ps -a -q) && \
-          docker pull mugeki/laundroapi:1.0.0 && \
+          docker pull mugeki/laundro-api:1.0.0 && \
           docker run -d -p 8000:8000 --name laundroapi \
           -e PORT=$PORT \
           -e DB_HOST=$HOST \
