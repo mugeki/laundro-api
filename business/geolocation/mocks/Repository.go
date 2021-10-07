@@ -13,20 +13,20 @@ type Repository struct {
 	mock.Mock
 }
 
-// GetLocationByIP provides a mock function with given fields:
-func (_m *Repository) GetLocationByIP() (geolocation.Domain, error) {
-	ret := _m.Called()
+// GetLocationByIP provides a mock function with given fields: ip
+func (_m *Repository) GetLocationByIP(ip string) (geolocation.Domain, error) {
+	ret := _m.Called(ip)
 
 	var r0 geolocation.Domain
-	if rf, ok := ret.Get(0).(func() geolocation.Domain); ok {
-		r0 = rf()
+	if rf, ok := ret.Get(0).(func(string) geolocation.Domain); ok {
+		r0 = rf(ip)
 	} else {
 		r0 = ret.Get(0).(geolocation.Domain)
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func() error); ok {
-		r1 = rf()
+	if rf, ok := ret.Get(1).(func(string) error); ok {
+		r1 = rf(ip)
 	} else {
 		r1 = ret.Error(1)
 	}

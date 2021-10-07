@@ -72,7 +72,7 @@ func main() {
 		ExpiresDuration: int64(EXPIRE),
 	}
 	e := echo.New()
-
+	e.IPExtractor = echo.ExtractIPDirect()
 	addrRepo := _driverFactory.NewAddressRepository(db)
 	geoRepo := _driverFactory.NewGeolocationRepository()
 

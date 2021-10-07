@@ -43,7 +43,8 @@ func (ctrl *LaundromatController) Insert(c echo.Context) error {
 }
 
 func (ctrl *LaundromatController) GetByIP(c echo.Context) error {
-	data, err :=  ctrl.laundromatService.GetByIP()
+	ip := c.RealIP()
+	data, err :=  ctrl.laundromatService.GetByIP(ip)
 	if err != nil {
 		return controller.NewErrorResponse(c, http.StatusNotFound, err)
 	}

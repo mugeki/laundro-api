@@ -56,13 +56,13 @@ func (_m *Service) GetByID(id uint) (laundromats.Domain, error) {
 	return r0, r1
 }
 
-// GetByIP provides a mock function with given fields:
-func (_m *Service) GetByIP() ([]laundromats.Domain, error) {
-	ret := _m.Called()
+// GetByIP provides a mock function with given fields: ip
+func (_m *Service) GetByIP(ip string) ([]laundromats.Domain, error) {
+	ret := _m.Called(ip)
 
 	var r0 []laundromats.Domain
-	if rf, ok := ret.Get(0).(func() []laundromats.Domain); ok {
-		r0 = rf()
+	if rf, ok := ret.Get(0).(func(string) []laundromats.Domain); ok {
+		r0 = rf(ip)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]laundromats.Domain)
@@ -70,8 +70,8 @@ func (_m *Service) GetByIP() ([]laundromats.Domain, error) {
 	}
 
 	var r1 error
-	if rf, ok := ret.Get(1).(func() error); ok {
-		r1 = rf()
+	if rf, ok := ret.Get(1).(func(string) error); ok {
+		r1 = rf(ip)
 	} else {
 		r1 = ret.Error(1)
 	}

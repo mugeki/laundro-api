@@ -31,8 +31,8 @@ func (service *laundroService) Insert(userID uint, laundroData *Domain, addressD
 	return res, nil
 }
 
-func (service *laundroService) GetByIP() ([]Domain, error){
-	location, err := service.geoRepository.GetLocationByIP()
+func (service *laundroService) GetByIP(ip string) ([]Domain, error){
+	location, err := service.geoRepository.GetLocationByIP(ip)
 	if err != nil {
 		return []Domain{}, business.ErrInternalServer
 	}

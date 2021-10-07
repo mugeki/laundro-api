@@ -160,7 +160,7 @@ func TestGetByIP(t *testing.T){
 		e := echo.New()
 		c := e.NewContext(req,rec)
 
-		mockLaundroService.On("GetByIP").Return([]_laundro.Domain{laundroDomain}, nil).Once()
+		mockLaundroService.On("GetByIP", mock.AnythingOfType("string")).Return([]_laundro.Domain{laundroDomain}, nil).Once()
 
 		resp := controller.BaseResponse{}
 		resp.Meta.Status = http.StatusOK
@@ -180,7 +180,7 @@ func TestGetByIP(t *testing.T){
 		e := echo.New()
 		c := e.NewContext(req,rec)
 
-		mockLaundroService.On("GetByIP").Return([]_laundro.Domain{}, business.ErrNearestLaundromatNotFound).Once()
+		mockLaundroService.On("GetByIP", mock.AnythingOfType("string")).Return([]_laundro.Domain{}, business.ErrNearestLaundromatNotFound).Once()
 
 		resp := controller.BaseResponse{}
 		resp.Meta.Status = http.StatusNotFound

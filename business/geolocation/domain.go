@@ -6,5 +6,5 @@ type Domain struct {
 }
 
 type Repository interface {
-	GetLocationByIP() (Domain, error)
+	GetLocationByIP(ip string) (Domain, error)
 }
