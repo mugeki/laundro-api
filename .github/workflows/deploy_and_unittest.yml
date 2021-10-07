@@ -79,4 +79,5 @@ jobs:
           -e DB_NAME=$DB_NAME \
           -e JWT_SECRET=$JWT_SECRET \
           -e JWT_EXPIRED=$JWT_EXPIRED \
-          mugeki/laundro-api:1.0.0'
+          mugeki/laundro-api:1.0.0' && \
+          docker exec laundro-api env
