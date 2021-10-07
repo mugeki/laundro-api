@@ -79,7 +79,6 @@ jobs:
           export JWT_SECRET='"'$JWT_SECRET'"' && \
           export JWT_EXPIRED='"'$JWT_EXPIRED'"' && \
           docker rm -vf $(docker ps -a -q) && \
-          docker rmi -f $(docker images -a -q) && \
           docker pull mugeki/laundro-api:1.0.0 && \
           docker run -d -p 8000:8000 --name laundro-api \
           -e PORT=$PORT \
