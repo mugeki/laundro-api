@@ -70,7 +70,7 @@ jobs:
         run: |
           ssh development 'docker rm -vf $(docker ps -a -q) && \
           docker pull mugeki/laundro-api:1.0.0 && \
-          docker run -d -p 8000:8000 --name laundroapi \
+          docker run -d -p 8000:8000 --name laundro-api \
           -e PORT=$PORT \
           -e DB_HOST=$HOST \
           -e DB_PORT=$DB_PORT \
@@ -79,4 +79,4 @@ jobs:
           -e DB_NAME=$DB_NAME \
           -e JWT_SECRET=$JWT_SECRET \
           -e JWT_EXPIRED=$JWT_EXPIRED \
-          mugeki/laundroapi:1.0.0'
+          mugeki/laundro-api:1.0.0'
