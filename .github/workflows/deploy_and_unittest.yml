@@ -61,6 +61,7 @@ jobs:
           END
       - name: Connect to EC2 instance & run Docker image from registry
         env:
+          PORT: ${{ secrets.PORT }}
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           DB_HOST: ${{ secrets.DB_HOST }}
@@ -77,6 +78,7 @@ jobs:
           export DB_NAME='"'$DB_NAME'"' && \
           export JWT_SECRET='"'$JWT_SECRET'"' && \
           export JWT_EXPIRED='"'$JWT_EXPIRED'"' && \
+          echo "Dibawah ini env:" && \
           echo $PORT && \
           echo $DB_USER && \
           echo $DB_PASSWORD && \
