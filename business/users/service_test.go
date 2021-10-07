@@ -53,6 +53,7 @@ func TestRegister(t *testing.T){
 		mockAddrRepository.On("Insert", mock.Anything).Return(addressDomain, nil).Once()
 		mockUserRepository.On("Register", mock.Anything).Return(userDomain, nil).Once()
 
+
 		inputUser := users.Domain{
 			Username    : "testUser",
 			Password    : "test",

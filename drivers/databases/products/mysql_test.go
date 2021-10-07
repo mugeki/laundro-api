@@ -93,3 +93,25 @@ func TestGetAllByLaundromat(t *testing.T){
 // 	_, err = productRepo.Delete(product.Id)
 // 	require.NoError(t, err)
 // }
+
+func TestGetCategoryID(t *testing.T){
+	db, mock, err := sqlmock.New(sqlmock.QueryMatcherOption(sqlmock.QueryMatcherEqual))
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+	gdb, _ := gorm.Open(mysql.New(mysql.Config{
+		Conn:                      db,
+		SkipInitializeWithVersion: true,
+	}), &gorm.Config{})
+	productRepo := products.NewMySQLRepository(gdb)
+	defer db.Close()
+	
+	mock.ExpectQuery("SELECT * FROM `categories` WHERE name = ? ORDER BY `categories`.`id` LIMIT 1").
+			WithArgs(product.CategoryName).
+			WillReturnRows(
+				sqlmock.NewRows([]string{"id"}).
+						AddRow(product.CategoryID))
+
+	_, err = productRepo.GetCategoryID("Test Category")
+	require.NoError(t, err)
+}
