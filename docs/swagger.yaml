@@ -1,0 +1,808 @@
+openapi: "3.0.2"
+info:
+  title: LaundroAPI
+  description: "API for laundromat"
+  version: "1.0.0"
+servers:
+  - url: http://18.218.108.87:8000
+
+tags:
+  - name: Laundromat
+    description: Everything about laundromats
+  - name: User
+    description: Everything about users
+  - name: Product
+    description: Everything about products
+  - name: Order
+    description: Everything about order
+
+paths:
+  /laundro/find-ip:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - Laundromat
+      summary: Find laundromat by user IP
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#components/schemas/SuccessResponse"
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/LaundromatResponse"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/FailResponse404"
+  /laundro/find-name/{name}:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - Laundromat
+      summary: Find laundromat by its name
+      parameters:
+        - in: path
+          name: laundromat_name
+          schema:
+            type: string
+          required: true
+          description: "Name of laundromat"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#components/schemas/SuccessResponse"
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/LaundromatResponse"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/FailResponse404"
+  /laundro/find-category/{category}:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - Laundromat
+      summary: Find laundromat by category
+      parameters:
+        - in: path
+          name: category
+          schema:
+            type: string
+          required: true
+          description: "Laundry category (eg: dry clean)"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#components/schemas/SuccessResponse"
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/LaundromatResponse"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/FailResponse404"
+  /laundro:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Laundromat
+      summary: Add a new laundromat
+      parameters:
+        - in: body
+          name: laundromat
+          required: true
+          schema:
+            $ref: "#components/schemas/Laundromat"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#components/schemas/SuccessResponse"
+                  data:
+                    $ref: "#/components/schemas/LaundromatResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/FailResponse400"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FailResponse403"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/FailResponse500"
+  /laundro/edit/{id}:
+    put:
+      security:
+        - bearerAuth: []
+      tags:
+        - Laundromat
+      summary: Edit a laundromat
+      parameters:
+        - in: path
+          name: laundromat_id
+          schema:
+            type: string
+          required: true
+          description: "Name of laundromat"
+        - in: body
+          name: laundromat
+          required: true
+          schema:
+            $ref: "#components/schemas/Laundromat"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#components/schemas/SuccessResponse"
+                  data:
+                    $ref: "#/components/schemas/LaundromatResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/FailResponse400"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/FailResponse403"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/FailResponse500"
+  /laundro/{laundromat_id}:
+    delete:
+      security:
+        - bearerAuth: []
+      tags:
+        - Laundromat
+      summary: Delete a specified laundromat
+      parameters:
+        - in: path
+          name: laundromat_id
+          schema:
+            type: integer
+          description: Id of laundromat to be deleted
+          required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#components/schemas/SuccessResponse"
+                  data:
+                    type: string
+                    example: Laundromat Deleted
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/FailResponse400"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/FailResponse403"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/FailResponse500"
+  /users/login:
+    post:
+      tags:
+        - User
+      summary: Logs user into system
+      parameters:
+        - in: body
+          name: user
+          required: true
+          schema:
+            properties:
+              username:
+                type: string
+              password:
+                type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#components/schemas/SuccessResponse"
+                  data:
+                    type: object
+                    properties:
+                      token:
+                        type: string
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/FailResponse400"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/FailResponse500"
+  /users:
+    post:
+      tags:
+        - User
+      summary: Register new user
+      parameters:
+        - in: body
+          name: user
+          required: true
+          schema:
+            properties:
+              username:
+                type: string
+              password:
+                type: string
+                format: password
+              email:
+                type: string
+              fullname:
+                type: string
+              date_of_birth:
+                type: string
+                format: date-time
+              phone_number:
+                type: string
+              role_id:
+                type: integer
+              address:
+                $ref: "#components/schemas/Address"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#components/schemas/SuccessResponse"
+                  data:
+                    $ref: "#/components/schemas/UserResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/FailResponse400"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/FailResponse500"
+  /products/from/{laundromat_id}:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - Product
+      summary: Get products from a laundromat
+      parameters:
+        - in: path
+          name: laundromat_id
+          schema:
+            type: string
+          required: true
+          description: Laundromat id
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#components/schemas/SuccessResponse"
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ProductResponse"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/FailResponse404"
+  /products/to/{laundromat_id}:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Product
+      summary: Create a new product
+      parameters:
+        - in: path
+          name: laundromat_id
+          schema:
+            type: string
+          required: true
+          description: Laundromat id
+        - in: body
+          name: product
+          required: true
+          schema:
+            $ref: "#components/schemas/Product"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#components/schemas/SuccessResponse"
+                  data:
+                    $ref: "#/components/schemas/ProductResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/FailResponse400"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/FailResponse500"
+  /products/edit/{product_id}:
+    put:
+      security:
+        - bearerAuth: []
+      tags:
+        - Product
+      summary: Edit an existing product
+      parameters:
+        - in: path
+          name: product_id
+          schema:
+            type: string
+          required: true
+          description: Product id
+        - in: body
+          name: product
+          required: true
+          schema:
+            $ref: "#components/schemas/Product"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#components/schemas/SuccessResponse"
+                  data:
+                    $ref: "#/components/schemas/ProductResponse"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/FailResponse400"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/FailResponse403"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/FailResponse500"
+  /products/{product_id}:
+    delete:
+      security:
+        - bearerAuth: []
+      tags:
+        - Product
+      summary: Delete a product
+      parameters:
+        - in: path
+          name: product_id
+          schema:
+            type: string
+          required: true
+          description: Product id
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#components/schemas/SuccessResponse"
+                  data:
+                    type: string
+                    example: Product Deleted
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/FailResponse400"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/FailResponse403"
+        "500":
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/FailResponse500"
+  /orders:
+    post:
+      security:
+        - bearerAuth: []
+      tags:
+        - Order
+      summary: Place a laundry order
+      parameters:
+        - in: body
+          name: order
+          required: true
+          schema:
+            $ref: "#components/schemas/Order"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#components/schemas/SuccessResponse"
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/OrderResponse"
+        "400":
+          description: BadRequest
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/FailResponse400"
+  /orders/get:
+    get:
+      security:
+        - bearerAuth: []
+      tags:
+        - Order
+      summary: Get all orders made by user
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  meta:
+                    $ref: "#components/schemas/SuccessResponse"
+                  data:
+                    type: array
+                    $ref: "#/components/schemas/OrderResponse"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: "#components/schemas/FailResponse404"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Address:
+      type: object
+      properties:
+        id:
+          type: integer
+        street:
+          type: string
+        postal_code:
+          type: integer
+        city:
+          type: string
+        province:
+          type: string
+    Laundromat:
+      type: object
+      properties:
+        name:
+          type: string
+        status:
+          type: boolean
+        address:
+          $ref: "#components/schemas/Address"
+    LaundromatResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        owner_id:
+          type: integer
+        address_id:
+          type: integer
+        status:
+          type: boolean
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+          format: password
+        email:
+          type: string
+        fullname:
+          type: string
+        date_of_birth:
+          type: string
+          format: date-time
+        phone_number:
+          type: string
+        role_id:
+          type: integer
+    UserResponse:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+          format: password
+        email:
+          type: string
+        fullname:
+          type: string
+        date_of_birth:
+          type: string
+          format: date-time
+        phone_number:
+          type: string
+        role_id:
+          type: integer
+        address_id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date_time
+    Product:
+      type: object
+      properties:
+        name:
+          type: string
+        kg_limit:
+          type: string
+          description: weight limit per order
+        kg_price:
+          type: string
+          description: price per kg
+        estimated_hour:
+          type: integer
+    ProductResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        kg_limit:
+          type: string
+          description: weight limit per order
+        kg_price:
+          type: string
+          description: price per kg
+        estimated_hour:
+          type: integer
+    Order:
+      type: object
+      properties:
+        laundromat_id:
+          type: integer
+        payment_id:
+          type: integer
+        product_name:
+          type: string
+        weight:
+          type: integer
+    OrderResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        user_id:
+          type: string
+        laundromat_id:
+          type: integer
+        laundromat_name:
+          type: string
+        payment_id:
+          type: integer
+        payment_gateway:
+          type: string
+        product_id:
+          type: integer
+        product_name:
+          type: string
+        estimated_finish_time:
+          type: string
+          format: date-time
+        weight:
+          type: integer
+        total_price:
+          type: integer
+    SuccessResponse:
+      type: object
+      properties:
+        meta:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Success
+    FailResponse400:
+      type: object
+      properties:
+        meta:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 400
+            message:
+              type: string
+              example: Error
+            messages:
+              type: array
+              example: Error message goes here
+        data:
+          type: string
+          example: null
+    FailResponse403:
+      type: object
+      properties:
+        meta:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 403
+            message:
+              type: string
+              example: Error
+            messages:
+              type: array
+              example: User Unauthorized
+        data:
+          type: string
+          example: null
+    FailResponse404:
+      type: object
+      properties:
+        meta:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 404
+            message:
+              type: string
+              example: Error
+            messages:
+              type: array
+              example: Error message goes here
+        data:
+          type: string
+          example: null
+    FailResponse500:
+      type: object
+      properties:
+        meta:
+          type: object
+          properties:
+            status:
+              type: integer
+              example: 500
+            message:
+              type: string
+              example: Error
+            messages:
+              type: array
+              example: Error message goes here
+        data:
+          type: string
+          example: null
