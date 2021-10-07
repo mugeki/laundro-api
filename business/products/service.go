@@ -21,7 +21,7 @@ func (service *productService) Insert(laundroID uint, productData *Domain) (Doma
 	productData.LaundromatID = laundroID
 	productData.CategoryID, err = service.productRepository.GetCategoryID(productData.CategoryName)
 	if err != nil {
-		return Domain{}, business.ErrInternalServer
+		return Domain{}, business.ErrInvalidProductCategory
 	}
 	res, err := service.productRepository.Insert(productData)
 	if err != nil {
@@ -33,7 +33,7 @@ func (service *productService) Insert(laundroID uint, productData *Domain) (Doma
 func (service *productService) GetAllByLaundromat(laundroID uint) ([]Domain, error) {
 	res, err := service.productRepository.GetAllByLaundromat(laundroID)
 	if err != nil {
-		return []Domain{}, nil
+		return []Domain{}, business.ErrProductNotFound
 	}
 	return res, nil
 }

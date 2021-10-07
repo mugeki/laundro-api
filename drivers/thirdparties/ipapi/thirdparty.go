@@ -17,13 +17,6 @@ func NewIpAPI() geolocation.Repository{
 }
 
 func (geo *IpAPI) GetLocationByIP() (geolocation.Domain, error){
-	
-	// resp, _ := http.Get("https://ipapi.co/json/")
-	// respData, _ := ioutil.ReadAll(resp.Body)
-	// defer resp.Body.Close()
-
-	// data := Response{}
-	// err := json.Unmarshal(respData, &data)
 	req, _ := http.NewRequest("GET", "https://ipapi.co/json/", nil)
 	req.Header.Set("User-Agent", "ipapi.co/#go-v1.3")
 	resp, err := geo.httpClient.Do(req)

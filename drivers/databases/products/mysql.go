@@ -21,6 +21,10 @@ func NewMySQLRepository(conn *gorm.DB) products.Repository {
 
 func (mysqlRepo *mysqlProductsRepository) Insert(productData *products.Domain) (products.Domain, error){
 	rec := FromDomain(*productData)
+	if rec.KgLimit < 0 || rec.KgPrice < 0 || rec.EstimatedHour < 0 {
+		err := errors.New("Invalid value")
+		return products.Domain{}, err
+	}
 	err := mysqlRepo.Conn.Create(&rec).Error
 	if err != nil {
 		return products.Domain{}, err

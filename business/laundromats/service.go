@@ -21,15 +21,12 @@ func NewLaundromatService(laundroRepo Repository, addrRepo addresses.Repository,
 }
 
 func (service *laundroService) Insert(userID uint, laundroData *Domain, addressData *addresses.Domain) (Domain, error){
-	newAddr, err := service.addrRepository.Insert(addressData)
+	newAddr, _ := service.addrRepository.Insert(addressData)
 	laundroData.AddressID = newAddr.ID
 	laundroData.OwnerID = userID
-	res, err := service.laundroRepository.Insert(laundroData)
+	res, _ := service.laundroRepository.Insert(laundroData)
 	if res == (Domain{}) {
 		return Domain{}, business.ErrDuplicateData
-	}
-	if err != nil {
-		return Domain{}, err
 	}
 	return res, nil
 }
@@ -63,7 +60,6 @@ func (service *laundroService) GetByName(name string) ([]Domain, error){
 		return []Domain{}, business.ErrLaundromatNotFound
 	}
 	return laundroDomain, nil
-
 }
 
 func (service *laundroService) GetByID(id uint) (Domain, error){
@@ -75,7 +71,7 @@ func (service *laundroService) GetByID(id uint) (Domain, error){
 }
 
 func (service *laundroService) Update(id uint, laundroData *Domain, addressData *addresses.Domain) (Domain, error){
-	newAddr, err := service.addrRepository.Insert(addressData)
+	newAddr, _ := service.addrRepository.Insert(addressData)
 	laundroData.AddressID = newAddr.ID
 	laundroDomain, err := service.laundroRepository.Update(id, laundroData)
 	if err != nil {

@@ -5,10 +5,10 @@ import (
 )
 
 type Products struct {
-	Category    	string      `json:"category"`
-	KgLimit  		int         `json:"kg_limit"`
-	KgPrice 		int         `json:"kg_price"`
-	EstimatedHour 	int		 	`json:"estimated_hour"`
+	Category    	string      `json:"category" valid:"required"`
+	KgLimit  		int         `json:"kg_limit" valid:"required"`
+	KgPrice 		int         `json:"kg_price" valid:"required"`
+	EstimatedHour 	int		 	`json:"estimated_hour" valid:"required"`
 }
 
 func (req *Products) ToDomain() (*products.Domain) {

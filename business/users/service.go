@@ -23,17 +23,14 @@ func NewUserService(userRepo Repository, addrRepo addresses.Repository, jwtauth 
 
 func (service *userService) Register(userData *Domain, addressData *addresses.Domain) (Domain, error){
 	
-	newAddr, err := service.addrRepository.Insert(addressData)
+	newAddr, _ := service.addrRepository.Insert(addressData)
 
 	hashedPassword, _ := encrypt.Hash(userData.Password)
-	userData.Password = string(hashedPassword)
+	userData.Password = hashedPassword
 	userData.AddressID = newAddr.ID
 	res, err := service.userRepository.Register(userData)
-	if res == (Domain{}) {
-		return Domain{}, business.ErrDuplicateData
-	}
 	if err != nil {
-		return Domain{}, err
+		return Domain{}, business.ErrDuplicateData
 	}
 	return res, nil
 }
@@ -55,7 +52,7 @@ func (service *userService) Login(username, password string) (string, error){
 func (service *userService) GetByID(id uint) (Domain, error){
 	userDomain, err := service.userRepository.GetByID(id)
 	if err != nil {
-		return Domain{}, err
+		return Domain{}, business.ErrUserNotFound
 	}
 	return userDomain, nil
 }

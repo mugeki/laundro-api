@@ -8,6 +8,7 @@ import (
 	"laundro-api-ca/controllers/orders/response"
 	"net/http"
 
+	"github.com/asaskevich/govalidator"
 	"github.com/labstack/echo/v4"
 )
 
@@ -27,6 +28,10 @@ func (ctrl *OrderController) Create(c echo.Context) error {
 		return controller.NewErrorResponse(c, http.StatusBadRequest, err)
 	}
 
+	if _, err := govalidator.ValidateStruct(req); err != nil {
+		return controller.NewErrorResponse(c, http.StatusBadRequest, err)
+	}
+	
 	userID := middleware.GetUser(c).ID
 
 	data, err := ctrl.orderService.Create(uint(userID), req.ToDomain())

@@ -6,16 +6,16 @@ import (
 )
 
 type Domain struct {
-	Id             uint
-	KgLimit        int
-	KgPrice        int
-	EstimatedHour  int
-	CategoryID     int
-	CategoryName   string
-	LaundromatID   uint
-	LaundromatName string
-	CreatedAt      time.Time
-	UpdatedAt      time.Time
+	Id             uint			`json:"id"`
+	KgLimit        int			`json:"kg_limit"`
+	KgPrice        int			`json:"kg_price"`
+	EstimatedHour  int			`json:"estimated_hour"`
+	CategoryID     int			`json:"category_id"`
+	CategoryName   string		`json:"category_name"`
+	LaundromatID   uint			`json:"laundromat_id"`
+	LaundromatName string		`json:"laundromat_name"`
+	CreatedAt      time.Time	`json:"created_at"`
+	UpdatedAt      time.Time	`json:"updated_at"`
 }
 
 type Service interface{

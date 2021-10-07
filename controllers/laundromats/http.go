@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/asaskevich/govalidator"
 	"github.com/labstack/echo/v4"
 )
 
@@ -27,6 +28,10 @@ func (ctrl *LaundromatController) Insert(c echo.Context) error {
 		return controller.NewErrorResponse(c, http.StatusBadRequest, err)
 	}
 
+	if _, err := govalidator.ValidateStruct(req); err != nil {
+		return controller.NewErrorResponse(c, http.StatusBadRequest, err)
+	}
+
 	userID := uint(middleware.GetUser(c).ID)
 	laundroData, addrData := req.ToDomain()
 	data, err := ctrl.laundromatService.Insert(userID, laundroData, addrData)
@@ -39,11 +44,8 @@ func (ctrl *LaundromatController) Insert(c echo.Context) error {
 
 func (ctrl *LaundromatController) GetByIP(c echo.Context) error {
 	data, err :=  ctrl.laundromatService.GetByIP()
-	if len(data) == 0 {
-		return controller.NewErrorResponse(c, http.StatusNotFound, err)
-	}
 	if err != nil {
-		return controller.NewErrorResponse(c, http.StatusInternalServerError, err)
+		return controller.NewErrorResponse(c, http.StatusNotFound, err)
 	}
 	return controller.NewSuccessResponse(c,data)
 }
@@ -68,6 +70,10 @@ func (ctrl *LaundromatController) GetByID(id int) laundromats.Domain{
 func (ctrl *LaundromatController) Update(c echo.Context) error {
 	req := request.Laundromats{}
 	if err := c.Bind(&req); err != nil {
+		return controller.NewErrorResponse(c, http.StatusBadRequest, err)
+	}
+
+	if _, err := govalidator.ValidateStruct(req); err != nil {
 		return controller.NewErrorResponse(c, http.StatusBadRequest, err)
 	}
 

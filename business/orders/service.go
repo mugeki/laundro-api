@@ -50,7 +50,7 @@ func (service *ordersService) Create(userId uint, orderData *Domain) (Domain, er
 	orderData.LaundromatID = productData.LaundromatID
 	orderData.LaundromatName = productData.LaundromatName
 
-	res, err := service.orderRepository.Create(orderData, &productData)
+	res, err := service.orderRepository.Create(orderData)
 	if err != nil {
 		return Domain{}, business.ErrInternalServer
 	}
@@ -58,8 +58,6 @@ func (service *ordersService) Create(userId uint, orderData *Domain) (Domain, er
 }
 
 func (service *ordersService) GetByUserID(userId uint) ([]Domain, error) {
-	
-
 	res, err := service.orderRepository.GetByUserID(userId)
 	if err != nil {
 		return []Domain{}, business.ErrOrdersNotFound

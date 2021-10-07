@@ -3,7 +3,6 @@ package orders
 import (
 	"errors"
 	"laundro-api-ca/business/orders"
-	"laundro-api-ca/business/products"
 
 	"gorm.io/gorm"
 )
@@ -18,7 +17,7 @@ func NewMySQLRepository(conn *gorm.DB) orders.Repository {
 	}
 }
 
-func (mysqlRepo *mysqlOrdersRepository) Create(orderData *orders.Domain, productData *products.Domain) (orders.Domain, error){
+func (mysqlRepo *mysqlOrdersRepository) Create(orderData *orders.Domain) (orders.Domain, error){
 	rec := fromDomain(*orderData)
 	err := mysqlRepo.Conn.Create(&rec).Error
 	if err != nil {

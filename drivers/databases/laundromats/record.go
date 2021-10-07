@@ -10,7 +10,7 @@ import (
 
 type Laundromats struct {
 	gorm.Model
-	Name      string  			  `json:"name"`
+	Name      string  			  `json:"name" gorm:"unique"`
 	OwnerID   uint    			  `json:"owner_id" gorm:"->;<-:create"`
 	Owner     users.Users    	  `gorm:"constraint:OnUpdate:NO ACTION,OnDelete:CASCADE;"`
 	AddressID uint    			  `json:"address_id"`

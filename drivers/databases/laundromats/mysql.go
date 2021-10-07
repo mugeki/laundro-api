@@ -76,7 +76,7 @@ func (mysqlRepo *mysqlLaundromatsRepository) Update(id uint, laundroData *laundr
 }
 
 func (mysqlRepo *mysqlLaundromatsRepository) Delete(id uint) (string, error){
-	rec := laundromats.Domain{}
+	rec := Laundromats{}
 	if err := mysqlRepo.Conn.Delete(&rec, "id = ?",id).Error
 	err != nil {
 		return "", err

@@ -1,8 +1,8 @@
 package request
 
 type Addresses struct {
-	Street     string `json:"street"`
-	PostalCode int    `json:"postal_code"`
-	City       string `json:"city"`
-	Province   string `json:"province"`
+	Street     string `json:"street" valid:"-"`
+	PostalCode int    `json:"postal_code" valid:"length(5|5)"`
+	City       string `json:"city" valid:"-"`
+	Province   string `json:"province" valid:"-"`
 }
