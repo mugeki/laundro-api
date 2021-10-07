@@ -48,14 +48,6 @@ jobs:
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_KEY: ${{ secrets.SSH_KEY }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
-          PORT: ${{ secrets.PORT }}
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_PORT: ${{ secrets.DB_PORT }}
-          DB_NAME: ${{ secrets.DB_NAME }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          JWT_EXPIRED: ${{ secrets.JWT_EXPIRED }}
         run: |
           mkdir -p ~/.ssh/
           echo "$SSH_KEY" > ~/.ssh/laundroapi.pem
@@ -72,12 +64,12 @@ jobs:
           ssh development 'docker rm -vf $(docker ps -a -q) && \
           docker pull mugeki/laundro-api:1.0.0 && \
           docker run -d -p 8000:8000 --name laundro-api \
-          -e PORT=$PORT \
-          -e DB_HOST=$HOST \
-          -e DB_PORT=$DB_PORT \
-          -e DB_USER=$DB_USER \
-          -e DB_PASSWORD=$DB_PASSWORD \
-          -e DB_NAME=$DB_NAME \
-          -e JWT_SECRET=$JWT_SECRET \
-          -e JWT_EXPIRED=$JWT_EXPIRED \
+          -e PORT=${{ secrets.PORT }} \
+          -e DB_HOST=${{ secrets.DB_HOST }} \
+          -e DB_PORT=${{ secrets.DB_PORT }} \
+          -e DB_USER=${{ secrets.DB_USER }} \
+          -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+          -e DB_NAME=${{ secrets.DB_NAME }} \
+          -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+          -e JWT_EXPIRED=${{ secrets.JWT_EXPIRED }} \
           mugeki/laundro-api:1.0.0'
