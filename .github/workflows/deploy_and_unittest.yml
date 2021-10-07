@@ -45,9 +45,6 @@ jobs:
       - name: Connect to EC2 and run docker
         uses: appleboy/ssh-action@v0.1.4
         env:
-          SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_KEY: ${{ secrets.SSH_KEY }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
           PORT: ${{ secrets.PORT }}
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
