@@ -68,15 +68,14 @@ jobs:
           END
       - name: Connect to EC2 instance & run Docker image from registry
         run: |
-          ssh development \
-          'export DB_USER='"'$DB_USER'"'; \
+          ssh development 'export DB_USER='"'$DB_USER'"'; \
           export DB_PASSWORD='"'$DB_PASSWORD'"'; \
           export DB_HOST='"'$DB_HOST'"'; \
           export DB_PORT='"'$DB_PORT'"'; \
           export DB_NAME='"'$DB_NAME'"'; \
           export JWT_SECRET='"'$JWT_SECRET'"'; \
-          export JWT_EXPIRED='"'$JWT_EXPIRED'"';' \
-          ssh development 'docker rm -vf $(docker ps -a -q) && \
+          export JWT_EXPIRED='"'$JWT_EXPIRED'"'; && \
+          docker rm -vf $(docker ps -a -q) && \
           docker pull mugeki/laundro-api:1.0.0 && \
           docker run -d -p 8000:8000 --name laundro-api \
           -e PORT=$PORT \
