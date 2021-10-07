@@ -1,4 +1,4 @@
-openapi: "3.0.2"
+openapi: "3.0.0"
 info:
   title: LaundroAPI
   description: "API for laundromat"
@@ -32,7 +32,7 @@ paths:
               schema:
                 properties:
                   meta:
-                    $ref: "#components/schemas/SuccessResponse"
+                    $ref: "#/components/schemas/SuccessResponse"
                   data:
                     type: array
                     items:
@@ -42,7 +42,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/FailResponse404"
+                $ref: "#/components/schemas/FailResponse404"
   /laundro/find-name/{name}:
     get:
       security:
@@ -52,7 +52,7 @@ paths:
       summary: Find laundromat by its name
       parameters:
         - in: path
-          name: laundromat_name
+          name: name
           schema:
             type: string
           required: true
@@ -65,7 +65,7 @@ paths:
               schema:
                 properties:
                   meta:
-                    $ref: "#components/schemas/SuccessResponse"
+                    $ref: "#/components/schemas/SuccessResponse"
                   data:
                     type: array
                     items:
@@ -75,7 +75,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/FailResponse404"
+                $ref: "#/components/schemas/FailResponse404"
   /laundro/find-category/{category}:
     get:
       security:
@@ -98,7 +98,7 @@ paths:
               schema:
                 properties:
                   meta:
-                    $ref: "#components/schemas/SuccessResponse"
+                    $ref: "#/components/schemas/SuccessResponse"
                   data:
                     type: array
                     items:
@@ -108,7 +108,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/FailResponse404"
+                $ref: "#/components/schemas/FailResponse404"
   /laundro:
     post:
       security:
@@ -121,7 +121,7 @@ paths:
           name: laundromat
           required: true
           schema:
-            $ref: "#components/schemas/Laundromat"
+            $ref: "#/components/schemas/Laundromat"
       responses:
         "200":
           description: OK
@@ -130,7 +130,7 @@ paths:
               schema:
                 properties:
                   meta:
-                    $ref: "#components/schemas/SuccessResponse"
+                    $ref: "#/components/schemas/SuccessResponse"
                   data:
                     $ref: "#/components/schemas/LaundromatResponse"
         "400":
@@ -138,7 +138,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/FailResponse400"
+                $ref: "#/components/schemas/FailResponse400"
         "403":
           description: Forbidden
           content:
@@ -150,7 +150,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/FailResponse500"
+                $ref: "#/components/schemas/FailResponse500"
   /laundro/edit/{id}:
     put:
       security:
@@ -160,7 +160,7 @@ paths:
       summary: Edit a laundromat
       parameters:
         - in: path
-          name: laundromat_id
+          name: id
           schema:
             type: string
           required: true
@@ -169,7 +169,7 @@ paths:
           name: laundromat
           required: true
           schema:
-            $ref: "#components/schemas/Laundromat"
+            $ref: "#/components/schemas/Laundromat"
       responses:
         "200":
           description: OK
@@ -178,7 +178,7 @@ paths:
               schema:
                 properties:
                   meta:
-                    $ref: "#components/schemas/SuccessResponse"
+                    $ref: "#/components/schemas/SuccessResponse"
                   data:
                     $ref: "#/components/schemas/LaundromatResponse"
         "400":
@@ -186,20 +186,20 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/FailResponse400"
+                $ref: "#/components/schemas/FailResponse400"
         "403":
           description: Forbidden
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/FailResponse403"
+                $ref: "#/components/schemas/FailResponse403"
         "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/FailResponse500"
-  /laundro/{laundromat_id}:
+                $ref: "#/components/schemas/FailResponse500"
+  /laundro/{id}:
     delete:
       security:
         - bearerAuth: []
@@ -208,7 +208,7 @@ paths:
       summary: Delete a specified laundromat
       parameters:
         - in: path
-          name: laundromat_id
+          name: id
           schema:
             type: integer
           description: Id of laundromat to be deleted
@@ -221,7 +221,7 @@ paths:
               schema:
                 properties:
                   meta:
-                    $ref: "#components/schemas/SuccessResponse"
+                    $ref: "#/components/schemas/SuccessResponse"
                   data:
                     type: string
                     example: Laundromat Deleted
@@ -230,19 +230,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/FailResponse400"
+                $ref: "#/components/schemas/FailResponse400"
         "403":
           description: Forbidden
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/FailResponse403"
+                $ref: "#/components/schemas/FailResponse403"
         "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/FailResponse500"
+                $ref: "#/components/schemas/FailResponse500"
   /users/login:
     post:
       tags:
@@ -266,7 +266,7 @@ paths:
               schema:
                 properties:
                   meta:
-                    $ref: "#components/schemas/SuccessResponse"
+                    $ref: "#/components/schemas/SuccessResponse"
                   data:
                     type: object
                     properties:
@@ -277,13 +277,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/FailResponse400"
+                $ref: "#/components/schemas/FailResponse400"
         "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/FailResponse500"
+                $ref: "#/components/schemas/FailResponse500"
   /users:
     post:
       tags:
@@ -312,7 +312,7 @@ paths:
               role_id:
                 type: integer
               address:
-                $ref: "#components/schemas/Address"
+                $ref: "#/components/schemas/Address"
       responses:
         "200":
           description: OK
@@ -321,7 +321,7 @@ paths:
               schema:
                 properties:
                   meta:
-                    $ref: "#components/schemas/SuccessResponse"
+                    $ref: "#/components/schemas/SuccessResponse"
                   data:
                     $ref: "#/components/schemas/UserResponse"
         "400":
@@ -329,14 +329,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/FailResponse400"
+                $ref: "#/components/schemas/FailResponse400"
         "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/FailResponse500"
-  /products/from/{laundromat_id}:
+                $ref: "#/components/schemas/FailResponse500"
+  /products/from/{id}:
     get:
       security:
         - bearerAuth: []
@@ -345,7 +345,7 @@ paths:
       summary: Get products from a laundromat
       parameters:
         - in: path
-          name: laundromat_id
+          name: id
           schema:
             type: string
           required: true
@@ -358,7 +358,7 @@ paths:
               schema:
                 properties:
                   meta:
-                    $ref: "#components/schemas/SuccessResponse"
+                    $ref: "#/components/schemas/SuccessResponse"
                   data:
                     type: array
                     items:
@@ -368,8 +368,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/FailResponse404"
-  /products/to/{laundromat_id}:
+                $ref: "#/components/schemas/FailResponse404"
+  /products/to/{id}:
     post:
       security:
         - bearerAuth: []
@@ -378,7 +378,7 @@ paths:
       summary: Create a new product
       parameters:
         - in: path
-          name: laundromat_id
+          name: id
           schema:
             type: string
           required: true
@@ -387,7 +387,7 @@ paths:
           name: product
           required: true
           schema:
-            $ref: "#components/schemas/Product"
+            $ref: "#/components/schemas/Product"
       responses:
         "200":
           description: OK
@@ -396,7 +396,7 @@ paths:
               schema:
                 properties:
                   meta:
-                    $ref: "#components/schemas/SuccessResponse"
+                    $ref: "#/components/schemas/SuccessResponse"
                   data:
                     $ref: "#/components/schemas/ProductResponse"
         "400":
@@ -404,13 +404,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/FailResponse400"
+                $ref: "#/components/schemas/FailResponse400"
         "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/FailResponse500"
+                $ref: "#/components/schemas/FailResponse500"
   /products/edit/{product_id}:
     put:
       security:
@@ -429,7 +429,7 @@ paths:
           name: product
           required: true
           schema:
-            $ref: "#components/schemas/Product"
+            $ref: "#/components/schemas/Product"
       responses:
         "200":
           description: OK
@@ -438,7 +438,7 @@ paths:
               schema:
                 properties:
                   meta:
-                    $ref: "#components/schemas/SuccessResponse"
+                    $ref: "#/components/schemas/SuccessResponse"
                   data:
                     $ref: "#/components/schemas/ProductResponse"
         "400":
@@ -446,19 +446,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/FailResponse400"
+                $ref: "#/components/schemas/FailResponse400"
         "403":
           description: Forbidden
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/FailResponse403"
+                $ref: "#/components/schemas/FailResponse403"
         "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/FailResponse500"
+                $ref: "#/components/schemas/FailResponse500"
   /products/{product_id}:
     delete:
       security:
@@ -481,7 +481,7 @@ paths:
               schema:
                 properties:
                   meta:
-                    $ref: "#components/schemas/SuccessResponse"
+                    $ref: "#/components/schemas/SuccessResponse"
                   data:
                     type: string
                     example: Product Deleted
@@ -490,19 +490,19 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/FailResponse400"
+                $ref: "#/components/schemas/FailResponse400"
         "403":
           description: Forbidden
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/FailResponse403"
+                $ref: "#/components/schemas/FailResponse403"
         "500":
           description: Internal Server Error
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/FailResponse500"
+                $ref: "#/components/schemas/FailResponse500"
   /orders:
     post:
       security:
@@ -515,7 +515,7 @@ paths:
           name: order
           required: true
           schema:
-            $ref: "#components/schemas/Order"
+            $ref: "#/components/schemas/Order"
       responses:
         "200":
           description: OK
@@ -524,7 +524,7 @@ paths:
               schema:
                 properties:
                   meta:
-                    $ref: "#components/schemas/SuccessResponse"
+                    $ref: "#/components/schemas/SuccessResponse"
                   data:
                     type: array
                     items:
@@ -534,7 +534,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/FailResponse400"
+                $ref: "#/components/schemas/FailResponse400"
   /orders/get:
     get:
       security:
@@ -550,16 +550,17 @@ paths:
               schema:
                 properties:
                   meta:
-                    $ref: "#components/schemas/SuccessResponse"
+                    $ref: "#/components/schemas/SuccessResponse"
                   data:
                     type: array
-                    $ref: "#/components/schemas/OrderResponse"
+                    items:
+                      $ref: "#/components/schemas/OrderResponse"
         "404":
           description: Not Found
           content:
             application/json:
               schema:
-                $ref: "#components/schemas/FailResponse404"
+                $ref: "#/components/schemas/FailResponse404"
 components:
   securitySchemes:
     bearerAuth:
@@ -588,7 +589,7 @@ components:
         status:
           type: boolean
         address:
-          $ref: "#components/schemas/Address"
+          $ref: "#/components/schemas/Address"
     LaundromatResponse:
       type: object
       properties:
@@ -685,7 +686,7 @@ components:
     Order:
       type: object
       properties:
-        laundromat_id:
+        id:
           type: integer
         payment_id:
           type: integer
@@ -748,7 +749,8 @@ components:
               example: Error
             messages:
               type: array
-              example: Error message goes here
+              items:
+                example: Error message goes here
         data:
           type: string
           example: null
@@ -766,7 +768,8 @@ components:
               example: Error
             messages:
               type: array
-              example: User Unauthorized
+              items:
+                example: User Unauthorized
         data:
           type: string
           example: null
@@ -784,7 +787,8 @@ components:
               example: Error
             messages:
               type: array
-              example: Error message goes here
+              items:
+                example: Error message goes here
         data:
           type: string
           example: null
@@ -802,7 +806,8 @@ components:
               example: Error
             messages:
               type: array
-              example: Error message goes here
+              items:
+                example: Error message goes here
         data:
           type: string
           example: null
