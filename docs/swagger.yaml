@@ -17,13 +17,20 @@ tags:
     description: Everything about order
 
 paths:
-  /laundro/find-ip:
+  /laundro/find-ip/{ip}:
     get:
       security:
         - bearerAuth: []
       tags:
         - Laundromat
       summary: Find laundromat by user IP
+      parameters:
+        - in: path
+          name: ip
+          schema:
+            type: string
+          required: true
+          description: "User ipv4 address"
       responses:
         "200":
           description: OK

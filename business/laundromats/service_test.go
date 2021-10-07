@@ -110,38 +110,38 @@ func TestInsert(t *testing.T){
 
 func TestGetByIP(t *testing.T){
 	t.Run("Valid Test", func(t *testing.T){
-		mockGeoRepository.On("GetLocationByIP").Return(geoDomain, nil).Once()
+		mockGeoRepository.On("GetLocationByIP", mock.AnythingOfType("string")).Return(geoDomain, nil).Once()
 		mockAddressRepository.On("FindByCity", mock.AnythingOfType("string")).Return([]addresses.Domain{addressDomain}, nil).Once()
 		mockLaundroRepository.On("GetByAddress", mock.AnythingOfType("[]uint")).Return([]laundromats.Domain{laundroDomain}, nil).Once()
 
-		resp, err := laundroService.GetByIP()
+		resp, err := laundroService.GetByIP("0.0.0.0")
 
 		assert.Nil(t, err)
 		assert.Contains(t, resp, laundroDomain)
 	})
 	t.Run("Invalid Test | Location Not Found", func(t *testing.T){
-		mockGeoRepository.On("GetLocationByIP").Return(geolocation.Domain{}, assert.AnError).Once()
+		mockGeoRepository.On("GetLocationByIP", mock.AnythingOfType("string")).Return(geolocation.Domain{}, assert.AnError).Once()
 
-		resp, err := laundroService.GetByIP()
+		resp, err := laundroService.GetByIP("0.0.0.0")
 
 		assert.NotNil(t, err)
 		assert.NotContains(t, resp, laundroDomain)
 	})
 	t.Run("Invalid Test | Addresses Not Found", func(t *testing.T){
-		mockGeoRepository.On("GetLocationByIP").Return(geoDomain, nil).Once()
+		mockGeoRepository.On("GetLocationByIP", mock.AnythingOfType("string")).Return(geoDomain, nil).Once()
 		mockAddressRepository.On("FindByCity", mock.AnythingOfType("string")).Return([]addresses.Domain{}, assert.AnError).Once()
 
-		resp, err := laundroService.GetByIP()
+		resp, err := laundroService.GetByIP("0.0.0.0")
 
 		assert.NotNil(t, err)
 		assert.NotContains(t, resp, laundroDomain)
 	})
 	t.Run("Invalid Test | Laundromat Not Found", func(t *testing.T){
-		mockGeoRepository.On("GetLocationByIP").Return(geoDomain, nil).Once()
+		mockGeoRepository.On("GetLocationByIP", mock.AnythingOfType("string")).Return(geoDomain, nil).Once()
 		mockAddressRepository.On("FindByCity", mock.AnythingOfType("string")).Return([]addresses.Domain{addressDomain}, nil).Once()
 		mockLaundroRepository.On("GetByAddress", mock.AnythingOfType("[]uint")).Return([]laundromats.Domain{}, assert.AnError).Once()
 
-		resp, err := laundroService.GetByIP()
+		resp, err := laundroService.GetByIP("0.0.0.0")
 
 		assert.NotNil(t, err)
 		assert.NotContains(t, resp, laundroDomain)
