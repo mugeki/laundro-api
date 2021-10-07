@@ -1,0 +1,70 @@
+name: AWS EC2 CI/ID
+
+on:
+  push:
+    branches:
+      - "ci/cd"
+  pull_request:
+    branches:
+      - "ci/cd"
+
+jobs:
+  unit-test:
+    name: "unit testing"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: set up go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.17
+      - name: running unit testing
+        run: go test ./... -cover
+
+  build-push-docker:
+    name: Build docker image then push to docker hub
+    runs-on: ubuntu-latest
+    needs: unit-test
+    steps:
+      - uses: actions/checkout@v2
+      - name: build docker
+        run: docker build -t mugeki/laundro-api:1.0.0 .
+      - name: Login to docker hub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+      - name: Push image to docker hub
+        run: docker push mugeki/laundroapi_km:1.0.0
+
+  deployment-ec2-aws:
+    name: Deploy to AWS EC2
+    runs-on: ubuntu-latest
+    needs: build-push-docker
+    steps:
+      - uses: actions/checkout@v2
+      - name: configuration SSH
+        env:
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_PORT: ${{ secrets.DB_PORT }}
+          DB_NAME: ${{ secrets.DB_NAME }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          JWT_EXPIRED: ${{ secrets.JWT_EXPIRED }}
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/laundroapi.pem
+          chmod 400 ~/.ssh/laundroapi.pem
+          cat >>~/.ssh/config <<END
+          Host development
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/laundroapi.pem
+            StrictHostKeyChecking=no
+          END
+      - name: Connect to EC2 instance & run Docker image from registry
+        run: ssh development 'docker rm -vf $(docker ps -a -q) && docker pull mugeki/laundroapi:1.0.0 && docker run -d -p 8000:8000 --name laundroapi mugeki/laundroapi:1.0.0'
