@@ -68,7 +68,7 @@ jobs:
           DB_PORT: ${{ secrets.DB_PORT }}
           DB_NAME: ${{ secrets.DB_NAME }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          JWT_EXPIRED: ${{ secrets.JWT_EXPIRED }}
+          JWT_EXPIRE: ${{ secrets.JWT_EXPIRE }}
         run: |
           ssh development 'export PORT='"'$PORT'"' && \
           export DB_USER='"'$DB_USER'"' && \
@@ -77,7 +77,7 @@ jobs:
           export DB_PORT='"'$DB_PORT'"' && \
           export DB_NAME='"'$DB_NAME'"' && \
           export JWT_SECRET='"'$JWT_SECRET'"' && \
-          export JWT_EXPIRED='"'$JWT_EXPIRED'"' && \
+          export JWT_EXPIRE='"'$JWT_EXPIRE'"' && \
           docker rm -vf $(docker ps -a -q) || true && \
           docker pull mugeki/laundro-api:1.0.0 && \
           docker run -d -p 8000:8000 --name laundro-api \
@@ -88,5 +88,5 @@ jobs:
           -e DB_PASSWORD=$DB_PASSWORD \
           -e DB_NAME=$DB_NAME \
           -e JWT_SECRET=$JWT_SECRET \
-          -e JWT_EXPIRED=$JWT_EXPIRED \
+          -e JWT_EXPIRE=$JWT_EXPIRE \
           mugeki/laundro-api:1.0.0'

@@ -71,7 +71,6 @@ func main() {
 		SecretJWT:       os.Getenv("JWT_SECRET"),
 		ExpiresDuration: int64(EXPIRE),
 	}
-
 	e := echo.New()
 
 	addrRepo := _driverFactory.NewAddressRepository(db)
