@@ -70,6 +70,7 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           JWT_EXPIRED: ${{ secrets.JWT_EXPIRED }}
         run: |
+          printenv PORT && printenv JWT_EXPIRED && \
           ssh development 'PORT=$PORT && \
           DB_USER=$DB_USER && \
           DB_PASSWORD=$DB_PASSWORD && \
