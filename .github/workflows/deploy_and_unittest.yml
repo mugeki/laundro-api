@@ -56,15 +56,10 @@ jobs:
           DB_NAME: ${{ secrets.DB_NAME }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           JWT_EXPIRED: ${{ secrets.JWT_EXPIRED }}
-        run: |
-          mkdir -p ~/.ssh/
-          echo "$SSH_KEY" > ~/.ssh/laundroapi.pem
-          chmod 400 ~/.ssh/laundroapi.pem
-          cat >>~/.ssh/config <<END
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
-          key_path: ~/.ssh/laundroapi.pem
+          password: ${{ secrets.SSH_PASSWORD }}
           envs: PORT,DB_USER,DB_PASSWORD,DB_HOST,DB_PORT,DB_NAME,JWT_EXPIRED,JWT_SECRET
           script: |
             docker rm -vf $(docker ps -a -q) && \
