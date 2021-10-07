@@ -56,7 +56,8 @@ jobs:
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
-          password: ${{ secrets.SSH_PASSWORD }}
+          key: ${{ secrets.SSH_KEY }}
+          port: 22
           envs: PORT,DB_USER,DB_PASSWORD,DB_HOST,DB_PORT,DB_NAME,JWT_EXPIRED,JWT_SECRET
           script: |
             docker rm -vf $(docker ps -a -q) && \
