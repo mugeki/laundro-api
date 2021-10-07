@@ -35,7 +35,7 @@ jobs:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Push image to docker hub
-        run: docker push mugeki/laundroapi_km:1.0.0
+        run: docker push mugeki/laundroapi:1.0.0
 
   deployment-ec2-aws:
     name: Deploy to AWS EC2
@@ -67,4 +67,16 @@ jobs:
             StrictHostKeyChecking=no
           END
       - name: Connect to EC2 instance & run Docker image from registry
-        run: ssh development 'docker rm -vf $(docker ps -a -q) && docker pull mugeki/laundroapi:1.0.0 && docker run -d -p 8000:8000 --name laundroapi mugeki/laundroapi:1.0.0'
+        run: |
+          ssh development 'docker rm -vf $(docker ps -a -q) && \
+          docker pull mugeki/laundroapi:1.0.0 && \
+          docker run -d -p 8000:8000 --name laundroapi \
+          -e PORT=$PORT \
+          -e DB_HOST=$HOST \
+          -e DB_PORT=$DB_PORT \
+          -e DB_USER=$DB_USER \
+          -e DB_PASSWORD=$DB_PASSWORD \
+          -e DB_NAME=$DB_NAME \
+          -e JWT_SECRET=$JWT_SECRET \
+          -e JWT_EXPIRED=$JWT_EXPIRED \
+          mugeki/laundroapi:1.0.0'
