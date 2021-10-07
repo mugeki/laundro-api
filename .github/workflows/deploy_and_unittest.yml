@@ -48,6 +48,7 @@ jobs:
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_KEY: ${{ secrets.SSH_KEY }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
+          PORT: ${{ secrets.PORT }}
           DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           DB_HOST: ${{ secrets.DB_HOST }}
@@ -68,15 +69,7 @@ jobs:
           END
       - name: Connect to EC2 instance & run Docker image from registry
         run: |
-          ssh development 'docker rm -vf $(docker ps -a -q) && \ 
-          echo $PORT && \
-          echo $HOST && \
-          echo $DB_PORT && \
-          echo $DB_USER && \
-          echo $DB_PASSWORD && \
-          echo $DB_NAME && \
-          echo $JWT_SECRET && \
-          echo $JWT_EXPIRED && \
+          ssh development 'docker rm -vf $(docker ps -a -q) && \
           docker pull mugeki/laundro-api:1.0.0 && \
           docker run -d -p 8000:8000 --name laundro-api \
           -e PORT=$PORT \
