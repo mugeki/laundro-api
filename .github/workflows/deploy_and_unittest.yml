@@ -43,7 +43,7 @@ jobs:
     needs: build-push-docker
     steps:
       - name: Connect to EC2 and run docker
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v0.1.4
         env:
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_KEY: ${{ secrets.SSH_KEY }}
