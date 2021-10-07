@@ -91,7 +91,7 @@ jobs:
           docker pull mugeki/laundro-api:1.0.0 && \
           docker run -d -p 8000:8000 --name laundro-api \
           -e PORT=$PORT \
-          -e DB_HOST=$HOST \
+          -e DB_HOST=$DB_HOST \
           -e DB_PORT=$DB_PORT \
           -e DB_USER=$DB_USER \
           -e DB_PASSWORD=$DB_PASSWORD \
